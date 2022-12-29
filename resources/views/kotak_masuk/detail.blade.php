@@ -76,6 +76,10 @@
                   $i = 1;
                   @endphp
                   @foreach($soal as $sl)
+                  @php
+                  $jawaban = $cont->getJawaban($sl->id)['jawaban'];
+                  $is_benar = $cont->getJawaban($sl->id)['is_benar'];
+                  @endphp
                   <div class="card-header"><b>Pertanyaan {{ $i }}</b></div>
                   <div class="card-body">
                     <br>
@@ -85,25 +89,25 @@
                     </div>
                     <h5 class="card-title">Jawaban</h5>
                     <div class="form-check">
-                      <input class="form-check-input" type="radio" name="jawaban[{{$i}}]" id="jawaban_a{{$i}}" value="A" required>
+                      <input class="form-check-input" type="radio" {{ $jawaban == 'A' ? 'checked' : '' }} name="jawaban[{{$i}}]" id="jawaban_a{{$i}}" value="A" required>
                       <label class="form-check-label" for="jawaban_a{{$i}}">
                         A. {{ $sl->pilihan_ganda($sl['id'])[0] }}
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="radio" name="jawaban[{{$i}}]" id="jawaban_b{{$i}}" value="B" required>
+                      <input class="form-check-input" type="radio" {{ $jawaban == 'B' ? 'checked' : '' }} name="jawaban[{{$i}}]" id="jawaban_b{{$i}}" value="B" required>
                       <label class="form-check-label" for="jawaban_b{{$i}}">
                         B. {{ $sl->pilihan_ganda($sl['id'])[1] }}
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="radio" name="jawaban[{{$i}}]" id="jawaban_c{{$i}}" value="C" required>
+                      <input class="form-check-input" type="radio" {{ $jawaban == 'C' ? 'checked' : '' }} name="jawaban[{{$i}}]" id="jawaban_c{{$i}}" value="C" required>
                       <label class="form-check-label" for="jawaban_c{{$i}}">
                         C. {{ $sl->pilihan_ganda($sl['id'])[2] }}
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="radio" name="jawaban[{{$i}}]" id="jawaban_d{{$i}}" value="D" required>
+                      <input class="form-check-input" type="radio" {{ $jawaban == 'D' ? 'checked' : '' }} name="jawaban[{{$i}}]" id="jawaban_d{{$i}}" value="D" required>
                       <label class="form-check-label" for="jawaban_d{{$i}}">
                         D. {{ $sl->pilihan_ganda($sl['id'])[3] }}
                       </label>

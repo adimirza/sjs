@@ -45,7 +45,18 @@ class KotakMasuk extends Controller
 
     public function getJawaban($id_soal)
     {
-        $jawaban = JawabanSoalModel::where(['id_users'])->first();
+        $result = [
+            'jawaban' => '',
+            'is_benar' => 0 
+        ];
+        $jawaban = JawabanSoalModel::where(['id_users' => auth()->user()->id, 'id_soal' => $id_soal])->first();
+        if($jawaban){
+            $result = [
+                'jawaban' => $jawaban->jawaban,
+                'is_benar' => $jawaban->is_benar 
+            ];
+        }
+        return $result;
     }
 
     public function jawab_soal(Request $request)
@@ -114,7 +125,8 @@ class KotakMasuk extends Controller
         $data = SuratModel::find($id);
         $soal = SoalModel::where('id_surat', $id)->get();
         $button = $this->button;
+        $cont = $this;
         $title = 'Kotak Masuk';
-        return view('kotak_masuk.detail', compact('data', 'soal', 'title', 'nilai', 'button'));
+        return view('kotak_masuk.detail', compact('data', 'soal', 'title', 'nilai', 'button', 'cont'));
     }
 }
