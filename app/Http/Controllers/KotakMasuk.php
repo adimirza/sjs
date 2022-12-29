@@ -4,16 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Lib\GetButton;
 use App\Lib\GetLibrary;
-use App\Models\DepartemenModel;
 use App\Models\HistoryNilaiModel;
 use App\Models\JawabanSoalModel;
 use App\Models\LogSuratModel;
 use App\Models\SoalModel;
 use App\Models\SuratModel;
-use App\Models\TopikSeModel;
-use App\Models\UserModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 
 class KotakMasuk extends Controller
 {
@@ -47,6 +43,11 @@ class KotakMasuk extends Controller
         return view('kotak_masuk.index', compact('data', 'title', 'button', 'lib', 'bulan', 'tahun'));
     }
 
+    public function getJawaban($id_soal)
+    {
+        $jawaban = JawabanSoalModel::where(['id_users'])->first();
+    }
+
     public function jawab_soal(Request $request)
     {
         $jml = $request->jumlah;
@@ -54,7 +55,7 @@ class KotakMasuk extends Controller
         $jml_benar = 0;
         for ($i = 1; $i <= $jml; $i++) {
             $soal = SoalModel::find($request->id_soal[$i]);
-            JawabanSoalModel::where(['id_users' => auth()->user()->id, 'id_soal' => $soal['id']])->delete();
+            $jawaban = JawabanSoalModel::where(['id_users' => auth()->user()->id, 'id_soal' => $soal['id']])->first();
             if ($soal['kunci_jawaban'] == $request->jawaban[$i]) {
                 $benar = 1;
                 $jml_benar = $jml_benar + 1;
@@ -67,7 +68,11 @@ class KotakMasuk extends Controller
                 'created_by' => auth()->user()->username,
                 'updated_by' => auth()->user()->username,
             ];
-            JawabanSoalModel::create($data);
+            if(!$jawaban){
+                JawabanSoalModel::create($data);
+            }else{
+                $jawaban->update($data);
+            }
             $benar = 0;
         }
         $dt_history = [
