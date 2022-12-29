@@ -17,7 +17,7 @@ class Api extends Controller
             return response()->json($result, 500);
         } 
         $result['status'] = true;
-        $result['message'] = 'Success';
+        $result['message'] = 'Success ';
         $result['data'] = $user;
         return response()->json($result, 200);
     }
