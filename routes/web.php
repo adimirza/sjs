@@ -12,12 +12,14 @@ use App\Http\Controllers\Menu;
 use App\Http\Controllers\MenuHeading;
 use App\Http\Controllers\MenuPermission;
 use App\Http\Controllers\ProfilWeb;
+use App\Http\Controllers\Rapat;
 use App\Http\Controllers\Role;
 use App\Http\Controllers\RolePermission;
 use App\Http\Controllers\Soal;
 use App\Http\Controllers\Surat;
 use App\Http\Controllers\Teguran;
 use App\Http\Controllers\TopikSe;
+use App\Http\Controllers\Tugas;
 use App\Http\Controllers\User;
 use Illuminate\Support\Facades\Route;
 
@@ -107,6 +109,22 @@ Route::match(['get', 'post'],'/surat/khusus/add', [Surat::class, 'store'])->midd
 Route::post('/surat/khusus/edit', [Surat::class, 'update'])->middleware(['auth', 'permission:surat edaran khusus,update']);
 Route::delete('/surat/khusus/delete/{id}', [Surat::class, 'delete'])->middleware(['auth', 'permission:surat edaran khusus,delete']);
 Route::get('/surat/khusus/detail/{id}', [Surat::class, 'detail'])->middleware(['auth', 'permission:surat edaran khusus,read']);
+
+Route::get('/rapat', [Rapat::class, 'index'])->middleware(['auth', 'permission:rapat,read']);
+Route::match(['get', 'post'],'/rapat/add', [Rapat::class, 'store'])->middleware(['auth', 'permission:rapat,create']);
+Route::post('/rapat/edit', [Rapat::class, 'update'])->middleware(['auth', 'permission:rapat,update']);
+Route::post('/rapat/edit_catatan', [Rapat::class, 'update_catatan'])->middleware(['auth', 'permission:rapat,update']);
+Route::post('/rapat/edit_foto', [Rapat::class, 'update_foto'])->middleware(['auth', 'permission:rapat,update']);
+Route::delete('/rapat/delete/{id}', [Rapat::class, 'delete'])->middleware(['auth', 'permission:rapat,delete']);
+Route::get('/rapat/detail/{id}', [Rapat::class, 'detail'])->middleware(['auth', 'permission:rapat,read']);
+
+Route::get('/tugas', [Tugas::class, 'index'])->middleware(['auth', 'permission:tugas,read']);
+Route::match(['get', 'post'],'/tugas/add', [Tugas::class, 'store'])->middleware(['auth', 'permission:tugas,create']);
+Route::post('/tugas/edit', [Tugas::class, 'update'])->middleware(['auth', 'permission:tugas,update']);
+Route::post('/tugas/edit_catatan', [Tugas::class, 'update_catatan'])->middleware(['auth', 'permission:tugas,update']);
+Route::post('/tugas/edit_foto', [Tugas::class, 'update_foto'])->middleware(['auth', 'permission:tugas,update']);
+Route::delete('/tugas/delete/{id}', [Tugas::class, 'delete'])->middleware(['auth', 'permission:tugas,delete']);
+Route::get('/tugas/detail/{id}', [Tugas::class, 'detail'])->middleware(['auth', 'permission:tugas,read']);
 
 Route::post('/soal/add', [Soal::class, 'store'])->middleware(['auth', 'permission:soal,create']);
 Route::post('/soal/edit', [Soal::class, 'update'])->middleware(['auth', 'permission:soal,update']);

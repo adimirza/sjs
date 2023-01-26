@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Lib\GetButton;
-use App\Models\DepartemenModel;
-use App\Models\RapatModel;
+use App\Models\TugasModel;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
-class Rapat extends Controller
+class Tugas extends Controller
 {
 
     public $button;
@@ -21,8 +20,8 @@ class Rapat extends Controller
 
     public function index(Request $request)
     {
-        $title = 'Rapat';
-        $data = RapatModel::orderBy("tanggal", "DESC")->get();
+        $title = 'Tugas';
+        $data = TugasModel::orderBy("tanggal", "DESC")->get();
         $button = $this->button;
         $cont = $this;
         return view('rapat.index', compact('data', 'title', 'button', 'cont'));
@@ -30,63 +29,50 @@ class Rapat extends Controller
 
     public function store(Request $request)
     {
-        $title = 'Rapat';
+        $title = 'Tugas';
         if ($request->isMethod('POST')) {
             $validatedData = $request->validate([
-                'id_departemen' => 'required',
                 'id_users' => 'required',
-                'judul' => 'required',
-                'kategori' => 'required',
+                'deskripsi' => 'required',
                 'tanggal' => 'required',
-                'waktu_mulai' => 'required',
-                'waktu_akhir' => 'required',
+                'lokasi' => 'required',
             ]);
             if ($validatedData) {
                 $data = [
-                    'id_departemen' => $request->id_departemen,
                     'id_users' => $request->id_users,
-                    'judul' => $request->judul,
-                    'kategori' => $request->kategori,
+                    'deskripsi' => $request->deskripsi,
                     'tanggal' => $request->tanggal,
-                    'waktu_mulai' => $request->waktu_mulai,
-                    'waktu_akhir' => $request->waktu_akhir,
+                    'lokasi' => $request->lokasi,
                     'created_by' => auth()->user()->username,
                     'updated_by' => auth()->user()->username,
                 ];
-                RapatModel::create($data);
+                TugasModel::create($data);
                 return redirect($this->button->formEtc($title))->with('success', 'Input data berhasil');
             }
         } else {
             $button = $this->button;
             $user = UserModel::all();
-            $departemen = DepartemenModel::all();
-            return view('rapat.add', compact('title', 'button', 'user', 'departemen'));
+            return view('rapat.add', compact('title', 'button', 'user'));
         }
     }
 
     public function update(Request $request)
     {
-        $title = 'Rapat';
-        $rapat = RapatModel::findOrFail($request->id);
+        $title = 'Tugas';
+        $rapat = TugasModel::findOrFail($request->id);
         $validatedData = $request->validate([
-            'id_departemen' => 'required',
             'id_users' => 'required',
-            'judul' => 'required',
-            'kategori' => 'required',
+            'deskripsi' => 'required',
             'tanggal' => 'required',
-            'waktu_mulai' => 'required',
-            'waktu_akhir' => 'required',
+            'lokasi' => 'required',
         ]);
 
         if ($validatedData) {
             $rapat->update([
-                'id_departemen' => $request->id_departemen,
                 'id_users' => $request->id_users,
-                'judul' => $request->judul,
-                'kategori' => $request->kategori,
+                'deskripsi' => $request->deskripsi,
                 'tanggal' => $request->tanggal,
-                'waktu_mulai' => $request->waktu_mulai,
-                'waktu_akhir' => $request->waktu_akhir,
+                'lokasi' => $request->lokasi,
                 'updated_by' => auth()->user()->username,
             ]);
             return redirect($this->button->formEtc($title) . '/detail/' . $request->id)->with('success', 'Edit data berhasil');
@@ -95,25 +81,24 @@ class Rapat extends Controller
 
     public function delete($id)
     {
-        $title = 'Rapat';
-        RapatModel::findOrFail($id)->delete();
+        $title = 'Tugas';
+        TugasModel::findOrFail($id)->delete();
         return redirect($this->button->formEtc($title))->with('success', 'Hapus data berhasil');
     }
 
     public function detail($id)
     {
-        $data = RapatModel::find($id);
+        $data = TugasModel::find($id);
         $user = UserModel::all();
-        $departemen = DepartemenModel::all();
         $button = $this->button;
-        $title = 'Rapat';
+        $title = 'Tugas';
         $cont = $this;
-        return view('rapat.detail', compact('data', 'user', 'departemen', 'title', 'button', 'cont'));
+        return view('tugas.detail', compact('data', 'user', 'title', 'button', 'cont'));
     }
 
     public function update_foto(Request $request)
     {
-        $uploadPath = public_path('upload/image/rapat/');
+        $uploadPath = public_path('upload/image/tugas/');
 
         if (!File::isDirectory($uploadPath)) {
             File::makeDirectory($uploadPath, 0755, true, true);
@@ -122,21 +107,21 @@ class Rapat extends Controller
         $extension = $file->getClientOriginalExtension();
         $rename = date('YmdHis') . $extension;
 
-        $rapat = RapatModel::findOrFail($request->id);
-        $rapat->update([
+        $tugas = TugasModel::findOrFail($request->id);
+        $tugas->update([
             'foto' => $rename,
             'updated_by' => auth()->user()->email,
         ]);
-        return redirect($this->button->formEtc('Rapat') . '/detail/' . $request->id)->with('success', 'Edit foto berhasil');
+        return redirect($this->button->formEtc('Tugas') . '/detail/' . $request->id)->with('success', 'Edit foto berhasil');
     }
 
     public function update_catatan(Request $request)
     {
-        $rapat = RapatModel::findOrFail($request->id);
-        $rapat->update([
+        $tugas = TugasModel::findOrFail($request->id);
+        $tugas->update([
             'catatan' => $request->catatan,
             'updated_by' => auth()->user()->email,
         ]);
-        return redirect($this->button->formEtc('Rapat') . '/detail/' . $request->id)->with('success', 'Edit catatan berhasil');
+        return redirect($this->button->formEtc('Tugas') . '/detail/' . $request->id)->with('success', 'Edit catatan berhasil');
     }
 }
