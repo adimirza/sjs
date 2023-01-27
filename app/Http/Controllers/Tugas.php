@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Lib\GetButton;
+use App\Models\DepartemenModel;
 use App\Models\TugasModel;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
 
 class Tugas extends Controller
 {
@@ -24,7 +25,7 @@ class Tugas extends Controller
         $data = TugasModel::orderBy("tanggal", "DESC")->get();
         $button = $this->button;
         $cont = $this;
-        return view('rapat.index', compact('data', 'title', 'button', 'cont'));
+        return view('tugas.index', compact('data', 'title', 'button', 'cont'));
     }
 
     public function store(Request $request)
@@ -36,6 +37,7 @@ class Tugas extends Controller
                 'deskripsi' => 'required',
                 'tanggal' => 'required',
                 'lokasi' => 'required',
+                'status' => 'required',
             ]);
             if ($validatedData) {
                 $data = [
@@ -43,6 +45,7 @@ class Tugas extends Controller
                     'deskripsi' => $request->deskripsi,
                     'tanggal' => $request->tanggal,
                     'lokasi' => $request->lokasi,
+                    'status' => $request->status,
                     'created_by' => auth()->user()->username,
                     'updated_by' => auth()->user()->username,
                 ];
@@ -51,8 +54,9 @@ class Tugas extends Controller
             }
         } else {
             $button = $this->button;
-            $user = UserModel::all();
-            return view('rapat.add', compact('title', 'button', 'user'));
+            // $user = UserModel::all();
+            $departemen = DepartemenModel::all();
+            return view('tugas.add', compact('title', 'button', 'departemen'));
         }
     }
 
@@ -65,6 +69,7 @@ class Tugas extends Controller
             'deskripsi' => 'required',
             'tanggal' => 'required',
             'lokasi' => 'required',
+            'status' => 'status',
         ]);
 
         if ($validatedData) {
@@ -73,6 +78,7 @@ class Tugas extends Controller
                 'deskripsi' => $request->deskripsi,
                 'tanggal' => $request->tanggal,
                 'lokasi' => $request->lokasi,
+                'status' => $request->status,
                 'updated_by' => auth()->user()->username,
             ]);
             return redirect($this->button->formEtc($title) . '/detail/' . $request->id)->with('success', 'Edit data berhasil');
@@ -90,27 +96,28 @@ class Tugas extends Controller
     {
         $data = TugasModel::find($id);
         $user = UserModel::all();
+        $departemen = DepartemenModel::all();
         $button = $this->button;
         $title = 'Tugas';
         $cont = $this;
-        return view('tugas.detail', compact('data', 'user', 'title', 'button', 'cont'));
+        return view('tugas.detail', compact('data', 'user', 'departemen', 'title', 'button', 'cont'));
     }
 
     public function update_foto(Request $request)
     {
-        $uploadPath = public_path('upload/image/tugas/');
+        $image = $request->file('foto');
+        $imagename = $request->id . time() . '.' . $image->extension();
+        $destinationPath = public_path('upload/image/tugas');
 
-        if (!File::isDirectory($uploadPath)) {
-            File::makeDirectory($uploadPath, 0755, true, true);
-        }
-        $file = $request->file('foto');
-        $extension = $file->getClientOriginalExtension();
-        $rename = date('YmdHis') . $extension;
+        $img = Image::make($image->path());
+        $img->resize(800, null, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save($destinationPath . '/' . $imagename);
 
         $tugas = TugasModel::findOrFail($request->id);
         $tugas->update([
-            'foto' => $rename,
-            'updated_by' => auth()->user()->email,
+            'foto' => $imagename,
+            'updated_by' => auth()->user()->username,
         ]);
         return redirect($this->button->formEtc('Tugas') . '/detail/' . $request->id)->with('success', 'Edit foto berhasil');
     }
@@ -123,5 +130,11 @@ class Tugas extends Controller
             'updated_by' => auth()->user()->email,
         ]);
         return redirect($this->button->formEtc('Tugas') . '/detail/' . $request->id)->with('success', 'Edit catatan berhasil');
+    }
+
+    public function getdata(Request $request)
+    {
+        $user = UserModel::where('id_departemen', $request->id)->get();
+        return json_encode($user);
     }
 }

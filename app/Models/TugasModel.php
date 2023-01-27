@@ -16,6 +16,7 @@ class TugasModel extends Model
         'lokasi',
         'catatan',
         'foto',
+        'status',
         'created_by',
         'updated_by',
     ];

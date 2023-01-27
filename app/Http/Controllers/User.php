@@ -93,7 +93,7 @@ class User extends Controller
                 $destinationPath = public_path('upload/image/profil');
     
                 $img = Image::make($image->path());
-                $img->resize(200, null, function ($constraint) {
+                $img->resize(800, null, function ($constraint) {
                     $constraint->aspectRatio();
                 })->save($destinationPath . '/' . $imagename);
             }else{

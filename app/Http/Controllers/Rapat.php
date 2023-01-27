@@ -7,7 +7,7 @@ use App\Models\DepartemenModel;
 use App\Models\RapatModel;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
 
 class Rapat extends Controller
 {
@@ -50,6 +50,7 @@ class Rapat extends Controller
                     'tanggal' => $request->tanggal,
                     'waktu_mulai' => $request->waktu_mulai,
                     'waktu_akhir' => $request->waktu_akhir,
+                    'link' => $request->link,
                     'created_by' => auth()->user()->username,
                     'updated_by' => auth()->user()->username,
                 ];
@@ -87,6 +88,7 @@ class Rapat extends Controller
                 'tanggal' => $request->tanggal,
                 'waktu_mulai' => $request->waktu_mulai,
                 'waktu_akhir' => $request->waktu_akhir,
+                'link' => $request->link,
                 'updated_by' => auth()->user()->username,
             ]);
             return redirect($this->button->formEtc($title) . '/detail/' . $request->id)->with('success', 'Edit data berhasil');
@@ -113,19 +115,19 @@ class Rapat extends Controller
 
     public function update_foto(Request $request)
     {
-        $uploadPath = public_path('upload/image/rapat/');
+        $image = $request->file('foto');
+        $imagename = $request->id . time() . '.' . $image->extension();
+        $destinationPath = public_path('upload/image/rapat');
 
-        if (!File::isDirectory($uploadPath)) {
-            File::makeDirectory($uploadPath, 0755, true, true);
-        }
-        $file = $request->file('foto');
-        $extension = $file->getClientOriginalExtension();
-        $rename = date('YmdHis') . $extension;
+        $img = Image::make($image->path());
+        $img->resize(800, null, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save($destinationPath . '/' . $imagename);
 
         $rapat = RapatModel::findOrFail($request->id);
         $rapat->update([
-            'foto' => $rename,
-            'updated_by' => auth()->user()->email,
+            'foto' => $imagename,
+            'updated_by' => auth()->user()->username,
         ]);
         return redirect($this->button->formEtc('Rapat') . '/detail/' . $request->id)->with('success', 'Edit foto berhasil');
     }
@@ -135,7 +137,7 @@ class Rapat extends Controller
         $rapat = RapatModel::findOrFail($request->id);
         $rapat->update([
             'catatan' => $request->catatan,
-            'updated_by' => auth()->user()->email,
+            'updated_by' => auth()->user()->username,
         ]);
         return redirect($this->button->formEtc('Rapat') . '/detail/' . $request->id)->with('success', 'Edit catatan berhasil');
     }

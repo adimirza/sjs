@@ -125,6 +125,7 @@ Route::post('/tugas/edit_catatan', [Tugas::class, 'update_catatan'])->middleware
 Route::post('/tugas/edit_foto', [Tugas::class, 'update_foto'])->middleware(['auth', 'permission:tugas,update']);
 Route::delete('/tugas/delete/{id}', [Tugas::class, 'delete'])->middleware(['auth', 'permission:tugas,delete']);
 Route::get('/tugas/detail/{id}', [Tugas::class, 'detail'])->middleware(['auth', 'permission:tugas,read']);
+Route::get('/tugas/getdata', [Tugas::class, 'getdata'])->middleware(['auth', 'permission:tugas,read']);
 
 Route::post('/soal/add', [Soal::class, 'store'])->middleware(['auth', 'permission:soal,create']);
 Route::post('/soal/edit', [Soal::class, 'update'])->middleware(['auth', 'permission:soal,update']);

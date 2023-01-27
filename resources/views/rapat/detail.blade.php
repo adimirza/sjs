@@ -14,8 +14,10 @@
     <div class="row">
       <div class="col-xl-4">
         <div class="card">
-          <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-            <img src="{{ url('upload/image/rapat') }}{{$data->foto ? '/'.$data->foto : '/person-icon.png'}}" alt="Profile" class="rounded-circle">
+          <div class="card-body pt-4">
+            <img src="{{ url('upload/image/rapat') }}{{$data->foto ? '/'.$data->foto : '/person-icon.png'}}" width="100%">
+          </div>
+          <div class="card-footer text-center">
             <span><button class="btn btn-info" data-bs-target="#upload_foto" data-bs-toggle="modal">Upload Foto</button></span>
           </div>
         </div>
@@ -36,7 +38,7 @@
               </li>
             </ul>
             <div class="tab-content pt-2">
-              <div class="tab-pane fade active profile-overview" id="overview">
+              <div class="tab-pane fade show active profile-overview" id="overview">
                 <h5 class="card-title">Detail Rapat</h5>
                 <div class="row">
                   <div class="col-lg-3 col-md-4 label ">Kategori</div>
@@ -73,7 +75,7 @@
                   <input type="hidden" name="id" value="{{ $data->id }}">
                   <div class="row mb-3">
                     <label for="Job" class="col-md-4 col-lg-3 col-form-label">Kategori</label>
-                    <div class="col-md-12 col-lg-12">
+                    <div class="col-md-8 col-lg-9">
                       <select name="kategori" class="form-select @error('kategori') is-invalid @enderror" aria-label="Default select example">
                         <option>--Pilih Kategori--</option>
                         <option {{ $data->kategori == 1 ? 'selected' : '' }} value="1">Online</option>
@@ -88,7 +90,7 @@
                   </div>
                   <div class="row mb-3">
                     <label class="col-md-4 col-lg-3 col-form-label">Judul Rapat</label>
-                    <div class="col-md-12 col-lg-12">
+                    <div class="col-md-8 col-lg-9">
                       <textarea name="judul" class="form-control @error('judul') is-invalid @enderror">{{ $data->judul }}</textarea>
                       @error('judul')
                       <div class="invalid-feedback">
@@ -143,7 +145,7 @@
                   </div>
                   <div class="row mb-3">
                     <label class="col-md-4 col-lg-3 col-form-label">Waktu Mulai</label>
-                    <div class="col-md-12 col-lg-12">
+                    <div class="col-md-8 col-lg-9">
                       <input name="waktu_mulai" type="time" class="form-control @error('waktu_mulai') is-invalid @enderror" value="{{ $data->waktu_mulai }}">
                       @error('waktu_mulai')
                       <div class="invalid-feedback">
@@ -154,7 +156,7 @@
                   </div>
                   <div class="row mb-3">
                     <label class="col-md-4 col-lg-3 col-form-label">Waktu Akhir</label>
-                    <div class="col-md-12 col-lg-12">
+                    <div class="col-md-8 col-lg-9">
                       <input name="waktu_akhir" type="time" class="form-control @error('waktu_akhir') is-invalid @enderror" value="{{ $data->waktu_akhir }}">
                       @error('waktu_akhir')
                       <div class="invalid-feedback">
@@ -165,7 +167,7 @@
                   </div>
                   <div class="row mb-3">
                     <label class="col-md-4 col-lg-3 col-form-label">Link</label>
-                    <div class="col-md-12 col-lg-12">
+                    <div class="col-md-8 col-lg-9">
                       <textarea name="link" class="form-control @error('link') is-invalid @enderror">{{ $data->link }}</textarea>
                       @error('link')
                       <div class="invalid-feedback">
@@ -181,11 +183,16 @@
               </div>
               <div class="tab-pane fade pt-3" id="catatan">
                 <form action="{{ url($button->formEtc($title).'/edit_catatan') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id" value="{{ $data->id }}">
                   <div class="card">
-                    <div class="card-body">
+                    <div class="card-header">
+                      Minutes of Meeting
+                    </div>
+                    <div class="card-body mt-3">
                       <textarea name="catatan" class="form-control">{{ $data->catatan }}</textarea>
                     </div>
-                    <div class="card-footer">
+                    <div class="card-footer text-center">
                       <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                     </div>
                   </div>

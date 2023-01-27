@@ -14,11 +14,11 @@
         <thead>
           <tr>
             <th scope="col">No.</th>
-            <th scope="col">Judul Rapat</th>
+            <th scope="col">Nama Staff</th>
             <th scope="col">Divisi</th>
-            <th scope="col">Waktu Mulai</th>
-            <th scope="col">Waktu Akhir</th>
-            <th scope="col">PIC</th>
+            <th scope="col">Deskripsi</th>
+            <th scope="col">Waktu</th>
+            <th scope="col">Status</th>
             <th scope="col">Aksi</th>
           </tr>
         </thead>
@@ -29,11 +29,19 @@
           @foreach($data as $dt)
           <tr>
             <td>{{ $i++ }}</td>
-            <td>{{ $dt->judul }}</td>
-            <td>{{ $dt->id_departemen ? $dt->departemen->nama : 'Umum' }}</td>
-            <td>{{ $dt->tanggal .'|'. $dt->waktu_mulai }}</td>
-            <td>{{ $dt->tanggal .'|'. $dt->waktu_akhir }}</td>
             <td>{{ $dt->user->name }}</td>
+            <td>{{ $dt->user->departemen->nama }}</td>
+            <td>{{ $dt->deskripsi }}</td>
+            <td>{{ date('d F Y H:i', strtotime($dt->tanggal)) }}</td>
+            <td>
+              @if($dt->status == 0)
+                <span class="badge rounded-pill bg-warning">Belum Dikerjakan</span>
+              @elseif($dt->status == 1)
+                <span class="badge rounded-pill bg-info">Sedang Dikerjakan</span>
+              @else
+                <span class="badge rounded-pill bg-success">Sudah Dikerjakan</span>
+              @endif
+            </td>
             <td>
 
               <form action="{{ url($button->formDelete($title), ['id' => $dt->id]) }}" method="POST">

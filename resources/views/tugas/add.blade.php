@@ -20,109 +20,83 @@
     <form action="{{ url($button->formAdd($title)) }}" method="POST" enctype="multipart/form-data">
       @csrf
       <div class="card-body">
-      <div class="form-group">
-        <label for="Job" class="col-md-4 col-lg-3 col-form-label">Kategori</label>
-        <div class="col-md-12 col-lg-12">
-          <select name="kategori" class="form-select @error('kategori') is-invalid @enderror" aria-label="Default select example">
-            <option>--Pilih Kategori--</option>
-            <option {{ old('kategori') == 1 ? 'selected' : '' }} value="1">Online</option>
-            <option {{ old('kategori') == 0 ? 'selected' : '' }} value="0">Offline</option>
-          </select>
-          @error('kategori')
-          <div class="invalid-feedback">
-            {{ $message }}
+        <div class="form-group">
+          <label for="Job" class="col-md-4 col-lg-3 col-form-label">Departemen/Divisi</label>
+          <div class="col-md-12 col-lg-12">
+            <select name="id_departemen" class="form-select @error('id_departemen') is-invalid @enderror" aria-label="Default select example" id="iddepartemen">
+              <option>--Pilih Departemen/Divisi--</option>
+              @foreach($departemen as $dep)
+              <option {{ $dep['id'] == old('id_departemen') ? 'selected' : '' }} value="{{ $dep['id'] }}">{{ $dep->nama }}</option>
+              @endforeach
+            </select>
+            @error('id_departemen')
+            <div class="invalid-feedback">
+              {{ $message }}
+            </div>
+            @enderror
           </div>
-          @enderror
         </div>
-      </div>
-      <div class="form-group">
-        <label class="col-md-4 col-lg-3 col-form-label">Judul Rapat</label>
-        <div class="col-md-12 col-lg-12">
-          <textarea name="judul" class="form-control @error('judul') is-invalid @enderror">{{ old('judul') }}</textarea>
-          @error('judul')
-          <div class="invalid-feedback">
-            {{ $message }}
+        <div class="form-group">
+          <label for="Job" class="col-md-4 col-lg-3 col-form-label">Nama Staff</label>
+          <div class="col-md-12 col-lg-12">
+            <select name="id_users" class="form-select @error('id_users') is-invalid @enderror" aria-label="Default select example" id="iduser">
+              <option>--Pilih PIC--</option>
+            </select>
+            @error('id_users')
+            <div class="invalid-feedback">
+              {{ $message }}
+            </div>
+            @enderror
           </div>
-          @enderror
         </div>
-      </div>
-      <div class="form-group">
-        <label for="Job" class="col-md-4 col-lg-3 col-form-label">Departemen/Divisi</label>
-        <div class="col-md-12 col-lg-12">
-          <select name="id_departemen" class="form-select @error('id_departemen') is-invalid @enderror" aria-label="Default select example">
-            <option>--Pilih Departemen/Divisi--</option>
-            <option value="0">Semua / Umum</option>
-            @foreach($departemen as $dep)
-            <option {{ $dep['id'] == old('id_departemen') ? 'selected' : '' }} value="{{ $dep['id'] }}">{{ $dep->nama }}</option>
-            @endforeach
-          </select>
-          @error('id_departemen')
-          <div class="invalid-feedback">
-            {{ $message }}
+        <div class="form-group">
+          <label class="col-md-4 col-lg-3 col-form-label">Deskripsi Tugas</label>
+          <div class="col-md-12 col-lg-12">
+            <textarea name="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror">{{ old('deskripsi') }}</textarea>
+            @error('deskripsi')
+            <div class="invalid-feedback">
+              {{ $message }}
+            </div>
+            @enderror
           </div>
-          @enderror
         </div>
-      </div>
-      <div class="form-group">
-        <label for="Job" class="col-md-4 col-lg-3 col-form-label">Person in Charge</label>
-        <div class="col-md-12 col-lg-12">
-          <select name="id_users" class="form-select @error('id_users') is-invalid @enderror" aria-label="Default select example">
-            <option>--Pilih PIC--</option>
-            @foreach($user as $usr)
-            <option {{ $usr['id'] == old('id_users') ? 'selected' : '' }} value="{{ $usr['id'] }}">{{ $usr['name'].' - '.$usr->jabatan->nama.' '.$usr->departemen->nama }}</option>
-            @endforeach
-          </select>
-          @error('id_users')
-          <div class="invalid-feedback">
-            {{ $message }}
+        <div class="form-group">
+          <label class="col-md-4 col-lg-3 col-form-label">Tanggal</label>
+          <div class="col-md-12 col-lg-12">
+            <input name="tanggal" type="datetime-local" class="form-control @error('tanggal') is-invalid @enderror" value="{{ old('tanggal') }}">
+            @error('tanggal')
+            <div class="invalid-feedback">
+              {{ $message }}
+            </div>
+            @enderror
           </div>
-          @enderror
         </div>
-      </div>
-      <div class="form-group">
-        <label class="col-md-4 col-lg-3 col-form-label">Tanggal Rapat</label>
-        <div class="col-md-12 col-lg-12">
-          <input name="tanggal" type="date" class="form-control @error('tanggal') is-invalid @enderror" value="{{ old('tanggal') }}">
-          @error('tanggal')
-          <div class="invalid-feedback">
-            {{ $message }}
+        <div class="form-group">
+          <label class="col-md-4 col-lg-3 col-form-label">Lokasi</label>
+          <div class="col-md-12 col-lg-12">
+            <textarea name="lokasi" class="form-control @error('lokasi') is-invalid @enderror">{{ old('lokasi') }}</textarea>
+            @error('lokasi')
+            <div class="invalid-feedback">
+              {{ $message }}
+            </div>
+            @enderror
           </div>
-          @enderror
         </div>
-      </div>
-      <div class="form-group">
-        <label class="col-md-4 col-lg-3 col-form-label">Waktu Mulai</label>
-        <div class="col-md-12 col-lg-12">
-          <input name="waktu_mulai" type="time" class="form-control @error('waktu_mulai') is-invalid @enderror" value="{{ old('waktu_mulai') }}">
-          @error('waktu_mulai')
-          <div class="invalid-feedback">
-            {{ $message }}
+        <div class="form-group">
+          <label for="Job" class="col-md-4 col-lg-3 col-form-label">Status</label>
+          <div class="col-md-12 col-lg-12">
+            <select name="status" class="form-select @error('status') is-invalid @enderror" aria-label="Default select example">
+              <option value="0">Belum Dikerjakan</option>
+              <option value="1">Sedang Dikerjakan</option>
+              <option value="2">Sudah Dikerjakan</option>
+            </select>
+            @error('status')
+            <div class="invalid-feedback">
+              {{ $message }}
+            </div>
+            @enderror
           </div>
-          @enderror
         </div>
-      </div>
-      <div class="form-group">
-        <label class="col-md-4 col-lg-3 col-form-label">Waktu Akhir</label>
-        <div class="col-md-12 col-lg-12">
-          <input name="waktu_akhir" type="time" class="form-control @error('waktu_akhir') is-invalid @enderror" value="{{ old('waktu_akhir') }}">
-          @error('waktu_akhir')
-          <div class="invalid-feedback">
-            {{ $message }}
-          </div>
-          @enderror
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-md-4 col-lg-3 col-form-label">Link</label>
-        <div class="col-md-12 col-lg-12">
-          <textarea name="link" class="form-control @error('link') is-invalid @enderror">{{ old('link') }}</textarea>
-          @error('link')
-          <div class="invalid-feedback">
-            {{ $message }}
-          </div>
-          @enderror
-        </div>
-      </div>
       </div>
       <div class="card-footer">
         <div class="text-center">
@@ -132,4 +106,39 @@
     </form><!-- End Profile Edit Form -->
   </div>
 </section>
+@endsection
+@section('footlib_req')
+<script>
+  $(document).ready(function() {
+    getuser('{{ old("id_departemen") }}', '{{ old("id_users") }}');
+    $("#iddepartemen").change(function() {
+      var id = $('#iddepartemen').val();
+      var iduser = '';
+      getuser(id, iduser);
+    });
+  });
+
+  function getuser(iddepartemen, iduser) {
+    $.ajax({
+      url: "{{ url($button->formEtc('Tugas').'/getdata') }}",
+      data: {
+        "id": iddepartemen,
+      },
+      type: "GET",
+      dataType: "JSON",
+      success: function(data) {
+        var html = '<option value="">--Pilih PIC--</option>';
+        var i;
+        for (i = 0; i < data.length; i++) {
+          if (iduser == data[i].id) {
+            html += '<option selected value=' + data[i].id + '>' + data[i].name + '</option>';
+          } else {
+            html += '<option value=' + data[i].id + '>' + data[i].name + '</option>';
+          }
+        }
+        $('#iduser').html(html);
+      }
+    })
+  }
+</script>
 @endsection

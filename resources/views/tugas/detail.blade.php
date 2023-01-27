@@ -14,8 +14,10 @@
     <div class="row">
       <div class="col-xl-4">
         <div class="card">
-          <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-            <img src="{{ url('upload/image/rapat') }}{{$data->foto ? '/'.$data->foto : '/person-icon.png'}}" alt="Profile" class="rounded-circle">
+          <div class="card-body pt-4">
+            <img src="{{ url('upload/image/tugas') }}{{$data->foto ? '/'.$data->foto : '/person-icon.png'}}" width="100%">
+          </div>
+          <div class="card-footer text-center">
             <span><button class="btn btn-info" data-bs-target="#upload_foto" data-bs-toggle="modal">Upload Foto</button></span>
           </div>
         </div>
@@ -36,35 +38,35 @@
               </li>
             </ul>
             <div class="tab-content pt-2">
-              <div class="tab-pane fade active profile-overview" id="overview">
-                <h5 class="card-title">Detail Rapat</h5>
+              <div class="tab-pane fade show active profile-overview" id="overview">
+                <h5 class="card-title">Detail Tugas</h5>
                 <div class="row">
-                  <div class="col-lg-3 col-md-4 label ">Kategori</div>
-                  <div class="col-lg-9 col-md-8">{{ $data->kategori ? 'Online' : 'Offline' }}</div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-3 col-md-4 label ">Judul Rapat</div>
-                  <div class="col-lg-9 col-md-8">{{ $data->judul }}</div>
+                  <div class="col-lg-3 col-md-4 label">Nama Staff</div>
+                  <div class="col-lg-9 col-md-8">{{ $data->user->name }} - {{ $data->user->jabatan->nama }}</div>
                 </div>
                 <div class="row">
                   <div class="col-lg-3 col-md-4 label">Departemen/Divisi</div>
-                  <div class="col-lg-9 col-md-8">{{ $data->id_departemen ? $data->departemen->nama : 'Umum' }}</div>
+                  <div class="col-lg-9 col-md-8">{{ $data->user->departemen->nama }}</div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-3 col-md-4 label">PIC</div>
-                  <div class="col-lg-9 col-md-8">{{ $data->user->name }} - {{ $data->user->jabatan->nama.' '.$data->user->departemen->nama }}</div>
+                  <div class="col-lg-3 col-md-4 label">Deskripsi Tugas</div>
+                  <div class="col-lg-9 col-md-8">{{ $data->deskripsi }}</div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-3 col-md-4 label">Tanggal Rapat</div>
+                  <div class="col-lg-3 col-md-4 label">Tanggal</div>
                   <div class="col-lg-9 col-md-8">{{ date('d F Y', strtotime($data->tanggal)) }}</div>
                 </div>
                 <div class="row">
                   <div class="col-lg-3 col-md-4 label">Waktu</div>
-                  <div class="col-lg-9 col-md-8">{{ $data->waktu_mulai.' - '.$data->waktu_akhir }}</div>
+                  <div class="col-lg-9 col-md-8">{{ date('H:i', strtotime($data->tanggal)) }}</div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-3 col-md-4 label">Link</div>
-                  <div class="col-lg-9 col-md-8">{{ $data->link }}</div>
+                  <div class="col-lg-3 col-md-4 label">Lokasi</div>
+                  <div class="col-lg-9 col-md-8">{{ $data->lokasi }}</div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">Catatan</div>
+                  <div class="col-lg-9 col-md-8">{{ $data->catatan }}</div>
                 </div>
               </div>
               <div class="tab-pane fade profile-edit pt-3" id="edit">
@@ -72,39 +74,12 @@
                   @csrf
                   <input type="hidden" name="id" value="{{ $data->id }}">
                   <div class="row mb-3">
-                    <label for="Job" class="col-md-4 col-lg-3 col-form-label">Kategori</label>
-                    <div class="col-md-12 col-lg-12">
-                      <select name="kategori" class="form-select @error('kategori') is-invalid @enderror" aria-label="Default select example">
-                        <option>--Pilih Kategori--</option>
-                        <option {{ $data->kategori == 1 ? 'selected' : '' }} value="1">Online</option>
-                        <option {{ $data->kategori == 0 ? 'selected' : '' }} value="0">Offline</option>
-                      </select>
-                      @error('kategori')
-                      <div class="invalid-feedback">
-                        {{ $message }}
-                      </div>
-                      @enderror
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label class="col-md-4 col-lg-3 col-form-label">Judul Rapat</label>
-                    <div class="col-md-12 col-lg-12">
-                      <textarea name="judul" class="form-control @error('judul') is-invalid @enderror">{{ $data->judul }}</textarea>
-                      @error('judul')
-                      <div class="invalid-feedback">
-                        {{ $message }}
-                      </div>
-                      @enderror
-                    </div>
-                  </div>
-                  <div class="row mb-3">
                     <label for="Job" class="col-md-4 col-lg-3 col-form-label">Departemen/Divisi</label>
                     <div class="col-md-8 col-lg-9">
-                      <select name="id_departemen" class="form-select @error('id_departemen') is-invalid @enderror" aria-label="Default select example">
+                      <select name="id_departemen" class="form-select @error('id_departemen') is-invalid @enderror" aria-label="Default select example" id="iddepartemen">
                         <option>--Pilih Departemen/Divisi--</option>
-                        <option {{ $data['id_departemen'] == '0' ? 'selected' : '' }} value="0">Semua / Umum</option>
                         @foreach($departemen as $dep)
-                        <option {{ $dep['id'] == $data['id_departemen'] ? 'selected' : '' }} value="{{ $dep['id'] }}">{{ $dep->nama }}</option>
+                        <option {{ $dep['id'] == $data->user->id_departemen ? 'selected' : '' }} value="{{ $dep['id'] }}">{{ $dep->nama }}</option>
                         @endforeach
                       </select>
                       @error('id_departemen')
@@ -115,12 +90,12 @@
                     </div>
                   </div>
                   <div class="row mb-3">
-                    <label for="Job" class="col-md-4 col-lg-3 col-form-label">Person in Charge</label>
+                    <label for="Job" class="col-md-4 col-lg-3 col-form-label">Nama Staff</label>
                     <div class="col-md-8 col-lg-9">
-                      <select name="id_users" class="form-select @error('id_users') is-invalid @enderror" aria-label="Default select example">
+                      <select name="id_users" class="form-select @error('id_users') is-invalid @enderror" aria-label="Default select example" id="iduser">
                         <option>--Pilih Pegawai--</option>
                         @foreach($user as $usr)
-                        <option {{ $usr['id'] == $data['id_users'] ? 'selected' : '' }} value="{{ $usr['id'] }}">{{ $usr['name'].' - '.$usr->jabatan->nama.' '.$usr->departemen->nama }}</option>
+                        <option {{ $usr['id'] == $data['id_users'] ? 'selected' : '' }} value="{{ $usr['id'] }}">{{ $usr['name'] }}</option>
                         @endforeach
                       </select>
                       @error('id_users')
@@ -131,9 +106,20 @@
                     </div>
                   </div>
                   <div class="row mb-3">
-                    <label for="inputDate" class="col-md-4 col-lg-3 col-form-label">Tanggal Rapat</label>
+                    <label class="col-md-4 col-lg-3 col-form-label">Deskripsi Tugas</label>
                     <div class="col-md-8 col-lg-9">
-                      <input name="tanggal" type="date" class="form-control @error('tanggal') is-invalid @enderror" value="{{ $data->tanggal }}">
+                      <textarea name="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror">{{ $data->deskripsi }}</textarea>
+                      @error('deskripsi')
+                      <div class="invalid-feedback">
+                        {{ $message }}
+                      </div>
+                      @enderror
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label for="inputDate" class="col-md-4 col-lg-3 col-form-label">Tanggal</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="tanggal" type="datetime-local" class="form-control @error('tanggal') is-invalid @enderror" value="{{ $data->tanggal }}">
                       @error('tanggal')
                       <div class="invalid-feedback">
                         {{ $message }}
@@ -142,10 +128,10 @@
                     </div>
                   </div>
                   <div class="row mb-3">
-                    <label class="col-md-4 col-lg-3 col-form-label">Waktu Mulai</label>
-                    <div class="col-md-12 col-lg-12">
-                      <input name="waktu_mulai" type="time" class="form-control @error('waktu_mulai') is-invalid @enderror" value="{{ $data->waktu_mulai }}">
-                      @error('waktu_mulai')
+                    <label class="col-md-4 col-lg-3 col-form-label">Lokasi</label>
+                    <div class="col-md-8 col-lg-9">
+                      <textarea name="lokasi" class="form-control @error('lokasi') is-invalid @enderror">{{ $data->lokasi }}</textarea>
+                      @error('lokasi')
                       <div class="invalid-feedback">
                         {{ $message }}
                       </div>
@@ -153,21 +139,14 @@
                     </div>
                   </div>
                   <div class="row mb-3">
-                    <label class="col-md-4 col-lg-3 col-form-label">Waktu Akhir</label>
-                    <div class="col-md-12 col-lg-12">
-                      <input name="waktu_akhir" type="time" class="form-control @error('waktu_akhir') is-invalid @enderror" value="{{ $data->waktu_akhir }}">
-                      @error('waktu_akhir')
-                      <div class="invalid-feedback">
-                        {{ $message }}
-                      </div>
-                      @enderror
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label class="col-md-4 col-lg-3 col-form-label">Link</label>
-                    <div class="col-md-12 col-lg-12">
-                      <textarea name="link" class="form-control @error('link') is-invalid @enderror">{{ $data->link }}</textarea>
-                      @error('link')
+                    <label for="Job" class="col-md-4 col-lg-3 col-form-label">Status</label>
+                    <div class="col-md-8 col-lg-9">
+                      <select name="status" class="form-select @error('status') is-invalid @enderror" aria-label="Default select example">
+                        <option {{$data->status == 0 ? 'selected' : ''}} value="0">Belum Dikerjakan</option>
+                        <option {{$data->status == 1 ? 'selected' : ''}} value="1">Sedang Dikerjakan</option>
+                        <option {{$data->status == 2 ? 'selected' : ''}} value="2">Sudah Dikerjakan</option>
+                      </select>
+                      @error('status')
                       <div class="invalid-feedback">
                         {{ $message }}
                       </div>
@@ -181,11 +160,16 @@
               </div>
               <div class="tab-pane fade pt-3" id="catatan">
                 <form action="{{ url($button->formEtc($title).'/edit_catatan') }}" method="POST">
+                  @csrf
+                  <input type="hidden" name="id" value="{{ $data->id }}">
                   <div class="card">
-                    <div class="card-body">
+                    <div class="card-header">
+                      Minutes of Meeting
+                    </div>
+                    <div class="card-body mt-3">
                       <textarea name="catatan" class="form-control">{{ $data->catatan }}</textarea>
                     </div>
-                    <div class="card-footer">
+                    <div class="card-footer text-center">
                       <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                     </div>
                   </div>
@@ -225,41 +209,34 @@
 @section('footlib_req')
 <script src="{{ url('/assets/js/sweetalert.min.js') }}"></script>
 <script type="text/javascript">
-  $('.show_confirm').click(function(event) {
-    var form = $(this).closest("form");
-    var name = $(this).data("name");
-    event.preventDefault();
-    swal({
-        title: "Apakah yakin ingin menghapus data?",
-        text: "Jika dihapus, data akan hilang selamanya.",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-      .then((willDelete) => {
-        if (willDelete) {
-          form.submit();
-        }
-      });
+  $(document).ready(function() {
+    getuser('{{ old("id_departemen") }}', '{{ old("id_users") }}');
+    $("#iddepartemen").change(function() {
+      var id = $('#iddepartemen').val();
+      var iduser = '';
+      getuser(id, iduser);
+    });
   });
-</script>
-<script>
-  function getDataEdit(id) {
+
+  function getuser(iddepartemen, iduser) {
     $.ajax({
-      url: "{{ url($button->formEtc('Soal').'/getsoal') }}",
+      url: "{{ url($button->formEtc('Tugas').'/getdata') }}",
       data: {
-        "id": id
+        "id": iddepartemen,
       },
       type: "GET",
       dataType: "JSON",
       success: function(data) {
-        $('#soal-id').val(data.id);
-        $('#soal-pertanyaan').val(data.pertanyaan);
-        $('#soal-pilihan_a').val(data.pilihan_a);
-        $('#soal-pilihan_b').val(data.pilihan_b);
-        $('#soal-pilihan_c').val(data.pilihan_c);
-        $('#soal-pilihan_d').val(data.pilihan_d);
-        $('#soal-kunci_jawaban').val(data.kunci_jawaban).change();
+        var html = '<option value="">--Pilih Staff--</option>';
+        var i;
+        for (i = 0; i < data.length; i++) {
+          if (iduser == data[i].id) {
+            html += '<option selected value=' + data[i].id + '>' + data[i].name + '</option>';
+          } else {
+            html += '<option value=' + data[i].id + '>' + data[i].name + '</option>';
+          }
+        }
+        $('#iduser').html(html);
       }
     })
   }
