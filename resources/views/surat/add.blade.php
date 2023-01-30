@@ -32,10 +32,10 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="Job" class="col-md-4 col-lg-3 col-form-label">Jenis Kelamin</label>
+        <label for="Job" class="col-md-4 col-lg-3 col-form-label">Topik SE</label>
         <div class="col-md-12 col-lg-12">
           <select name="id_topik" class="form-select @error('id_topik') is-invalid @enderror" aria-label="Default select example">
-            <option>Pilih Topik</option>
+            <option>--Pilih Topik--</option>
             @foreach($topik as $top)
             <option {{ old('id_topik') == $top['id'] ? 'selected' : '' }} value="{{ $top['id'] }}">{{ $top['nama'] }}</option>
             @endforeach

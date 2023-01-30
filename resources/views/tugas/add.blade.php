@@ -20,6 +20,7 @@
     <form action="{{ url($button->formAdd($title)) }}" method="POST" enctype="multipart/form-data">
       @csrf
       <div class="card-body">
+        @if(auth()->user()->jabatan->role->nama != 'Member')
         <div class="form-group">
           <label for="Job" class="col-md-4 col-lg-3 col-form-label">Departemen/Divisi</label>
           <div class="col-md-12 col-lg-12">
@@ -49,6 +50,9 @@
             @enderror
           </div>
         </div>
+        @else
+        <input type="hidden" name="id_users" value="{{ auth()->user()->id }}">
+        @endif
         <div class="form-group">
           <label class="col-md-4 col-lg-3 col-form-label">Deskripsi Tugas</label>
           <div class="col-md-12 col-lg-12">

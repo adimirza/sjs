@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
+
+use App\Lib\GetLibrary;
 use App\Lib\GetProfilWeb;
 $profil = new GetProfilWeb;
+$lib = new GetLibrary;
 ?>
 <head>
   @include('_partials._headerlib')

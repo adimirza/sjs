@@ -23,7 +23,14 @@ class Rapat extends Controller
     public function index(Request $request)
     {
         $title = 'Rapat';
-        $data = RapatModel::orderBy("tanggal", "DESC")->get();
+        if(auth()->user()->jabatan->role->nama == 'Member'){
+            $id_departemen = auth()->user()->id_departemen;
+            $data = RapatModel::whereRaw("id_departemen = $id_departemen OR id_departemen = 0")
+                                ->orderBy("tanggal", "DESC")->get();
+        }else{
+            $data = RapatModel::orderBy("tanggal", "DESC")->get();
+        }
+        
         $button = $this->button;
         $cont = $this;
         return view('rapat.index', compact('data', 'title', 'button', 'cont'));

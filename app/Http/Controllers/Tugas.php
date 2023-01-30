@@ -23,7 +23,13 @@ class Tugas extends Controller
     public function index(Request $request)
     {
         $title = 'Tugas';
-        $data = TugasModel::orderBy("tanggal", "DESC")->get();
+        if(auth()->user()->jabatan->role->nama == 'Member'){
+            $id_users = auth()->user()->id;
+            $data = TugasModel::where("id_users", $id_users)
+                                ->orderBy("tanggal", "DESC")->get();
+        }else{
+            $data = TugasModel::orderBy("tanggal", "DESC")->get();
+        }
         $button = $this->button;
         $cont = $this;
         return view('tugas.index', compact('data', 'title', 'button', 'cont'));

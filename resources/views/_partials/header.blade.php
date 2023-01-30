@@ -8,12 +8,44 @@
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div>
     <nav class="header-nav ms-auto">
+
       <ul class="d-flex align-items-center">
         <li class="nav-item d-block d-lg-none">
           <a class="nav-link nav-icon search-bar-toggle " href="#">
             <i class="bi bi-search"></i>
           </a>
         </li>
+        <li class="nav-item dropdown">
+
+          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+            <i class="bi bi-bell"></i>
+            <span class="badge bg-primary badge-number">{{ intval($lib->getNotifSurat()['blmDibaca'] + $lib->getNotifSurat()['blmTuntas']) }}</span>
+          </a><!-- End Notification Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+            <li class="dropdown-header">
+            {{ intval($lib->getNotifSurat()['blmDibaca'] + $lib->getNotifSurat()['blmTuntas']) }} notifikasi baru.
+              <a href="{{ url('kotak_masuk') }}"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="notification-item">
+              <i class="bi bi-exclamation-circle text-danger"></i>
+              <div>
+                <h4>Belum Dibaca</h4>
+                <p>{{ $lib->getNotifSurat()['blmDibaca'] }} surat belum dibaca.</p>
+              </div>
+            </li>
+            <li class="notification-item">
+              <i class="bi bi-exclamation-circle text-warning"></i>
+              <div>
+                <h4>Belum Tuntas</h4>
+                <p>{{ $lib->getNotifSurat()['blmTuntas'] }} surat belum tuntas.</p>
+              </div>
+            </li>
+          </ul>
         <li class="nav-item dropdown pe-3">
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <img src="{{ url('upload/image/profil') }}{{auth()->user()->foto ? '/'.auth()->user()->foto : '/person-icon.png'}}" alt="Profile" class="rounded-circle">

@@ -9,6 +9,12 @@ use App\Models\MenuPermissionModel;
 
 class GetMenu
 {
+  public $lib;
+
+  public function __construct()
+  {
+      $this->lib = new GetLibrary;
+  }
 
   function getAllMenus($title)
   {
@@ -17,7 +23,9 @@ class GetMenu
     $html_out .= $this->getMenus(0, $title);
     foreach($heading as $head){
       if($this->getMenus($head['id'], $title)){
-        $html_out .= '<li class="nav-heading">'.$head['nama_heading'].'</li>';
+        if(auth()->user()->jabatan->role->nama != 'Member'){
+          $html_out .= '<li class="nav-heading">'.$head['nama_heading'].'</li>';
+        }
         $html_out .= $this->getMenus($head['id'], $title);
       }
       // $html_out .= '<li class="nav-heading">'.$head['nama_heading'].'</li>';
@@ -50,7 +58,6 @@ class GetMenu
           }
         }
       }
-      
       $url = url('/'.$menu['uri']);
       $child = $this->getChilds($menu['id'], $title);
       if(!$child){
@@ -65,7 +72,7 @@ class GetMenu
       }else{
         $html_out .= '<li class="nav-item ">
                           <a class="nav-link '.$open.'" data-bs-target="#menu'.$menu['id'].'-nav" data-bs-toggle="collapse" href="#">
-                              <i class="'.$menu['icon'].'"></i><span>'.$menu['nama'].'</span><i class="'.$menu['icon'].'"></i>
+                              <i class="'.$menu['icon'].'"></i><span>'.$menu['nama'].'</span><i class="bi bi-chevron-down ms-auto"></i>
                           </a>';
         $html_out .= '<ul id="menu'.$menu['id'].'-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">';
         $html_out .= $child;

@@ -73,6 +73,7 @@
                 <form action="{{ url($button->formEdit($title)) }}" method="POST">
                   @csrf
                   <input type="hidden" name="id" value="{{ $data->id }}">
+                  @if(auth()->user()->jabatan->role->nama != 'Member')
                   <div class="row mb-3">
                     <label for="Job" class="col-md-4 col-lg-3 col-form-label">Departemen/Divisi</label>
                     <div class="col-md-8 col-lg-9">
@@ -102,6 +103,9 @@
                       @enderror
                     </div>
                   </div>
+                  @else
+                  <input type="hidden" name="id_users" value="{{ auth()->user()->id }}">
+                  @endif
                   <div class="row mb-3">
                     <label class="col-md-4 col-lg-3 col-form-label">Deskripsi Tugas</label>
                     <div class="col-md-8 col-lg-9">

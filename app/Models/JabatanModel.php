@@ -15,4 +15,9 @@ class JabatanModel extends Model
         'created_by',
         'updated_by',
     ];
+
+    public function role()
+    {
+        return $this->belongsTo(RoleModel::class, 'id_role');
+    }
 }

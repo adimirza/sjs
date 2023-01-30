@@ -97,7 +97,7 @@ class KotakMasuk extends Controller
         HistoryNilaiModel::create($dt_history);
         $persen = ($jml_benar/$jml) * 100;
         $status = 3;
-        if($persen >= 80){
+        if($persen == 100){
             $status = 2;
         }
         $cek = LogSuratModel::where(['id_surat' => $soal['id_surat'], 'id_users' => auth()->user()->id, 'status' => '2'])->first();
