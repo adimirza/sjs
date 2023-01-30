@@ -7,6 +7,7 @@ use App\Models\DepartemenModel;
 use App\Models\TugasModel;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
 
 class Tugas extends Controller
@@ -69,7 +70,7 @@ class Tugas extends Controller
             'deskripsi' => 'required',
             'tanggal' => 'required',
             'lokasi' => 'required',
-            'status' => 'status',
+            'status' => 'required',
         ]);
 
         if ($validatedData) {
@@ -108,7 +109,9 @@ class Tugas extends Controller
         $image = $request->file('foto');
         $imagename = $request->id . time() . '.' . $image->extension();
         $destinationPath = public_path('upload/image/tugas');
-
+        if (!File::isDirectory($destinationPath)) {
+            File::makeDirectory($destinationPath, 0755, true, true);
+        }
         $img = Image::make($image->path());
         $img->resize(800, null, function ($constraint) {
             $constraint->aspectRatio();

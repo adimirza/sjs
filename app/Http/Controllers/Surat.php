@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Lib\GetButton;
 use App\Models\DepartemenModel;
+use App\Models\HistoryNilaiModel;
 use App\Models\LogSuratModel;
 use App\Models\SoalModel;
 use App\Models\SuratModel;
@@ -93,7 +94,8 @@ class Surat extends Controller
             $topik = TopikSeModel::all();
             $user = UserModel::all();
             $departemen = DepartemenModel::all();
-            return view('surat.add', compact('title', 'button', 'topik', 'user', 'departemen'));
+            $cont = $this;
+            return view('surat.add', compact('title', 'button', 'topik', 'user', 'departemen', 'cont'));
         }
     }
 
@@ -149,7 +151,7 @@ class Surat extends Controller
     public function detail($id)
     {
         $data = SuratModel::find($id);
-        $soal = SoalModel::where('id_surat', $id)->get();
+        $soal = SoalModel::where('id_surat', $id)->get()->shuffle();
         $topik = TopikSeModel::all();
         $user = UserModel::all();
         $departemen = DepartemenModel::all();
@@ -162,11 +164,17 @@ class Surat extends Controller
         $cont = $this;
         $baca = LogSuratModel::where(['id_surat' => $id, 'status' => 1])->get();
         $tuntas = LogSuratModel::where(['id_surat' => $id, 'status' => 2])->get();
-        return view('surat.detail', compact('data', 'soal', 'topik', 'user', 'departemen', 'title', 'button', 'cont', 'baca', 'tuntas'));
+        $history_nilai = HistoryNilaiModel::where('id_surat', $id)->orderBy('created_at', 'DESC')->get();
+        return view('surat.detail', compact('data', 'soal', 'topik', 'user', 'departemen', 'title', 'button', 'cont', 'baca', 'tuntas', 'history_nilai'));
     }
 
     public function ganti_surat(Request $request)
     {
+        if ($this->jenis == 'umum') {
+            $title = 'Surat Edaran Umum';
+        } else {
+            $title = 'Surat Edaran Khusus';
+        }
         $uploadPath = public_path('upload/surat/');
 
         if (!File::isDirectory($uploadPath)) {
@@ -181,7 +189,7 @@ class Surat extends Controller
             'file_surat' => $rename,
             'updated_by' => auth()->user()->email,
         ]);
-        return redirect($this->button->formEtc('Pegawai') . '/info/' . $request->id)->with('success', 'Edit data berhasil');
+        return redirect($this->button->formEtc($title).'/detail/'.$request->id)->with('success', 'Edit data berhasil');
     }
 
     public function getTarget($id_departemen)

@@ -134,6 +134,9 @@
               <li class="nav-item">
                 <button class="nav-link {{ count($soal) <= 0 ? 'active' : '' }}" data-bs-toggle="tab" data-bs-target="#soal">Soal</button>
               </li>
+              <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#log">Log Pengerjaan</button>
+              </li>
             </ul>
             <div class="tab-content pt-2">
               <div class="tab-pane fade {{ count($soal) > 0 ? 'show active' : '' }} profile-overview" id="overview">
@@ -160,7 +163,13 @@
                 </div>
                 <div class="row">
                   <div class="col-lg-3 col-md-4 label">Status SE</div>
-                  <div class="col-lg-9 col-md-8">{{ $data->status_se == 0 ? 'Internal' : 'External' }}</div>
+                  <div class="col-lg-9 col-md-8">
+                    @if($data->ditujukan == 0)
+                    {{ $data->status_se == 0 ? 'Internal General' : 'External General' }}
+                    @else
+                    {{ $data->status_se == 0 ? 'Departemen' : 'External Pelanggan' }}
+                    @endif
+                  </div>
                 </div>
                 <div class="row">
                   <div class="col-lg-3 col-md-4 label">Ditujukan Untuk</div>
@@ -206,7 +215,7 @@
                     <label for="Job" class="col-md-4 col-lg-3 col-form-label">Topic</label>
                     <div class="col-md-8 col-lg-9">
                       <select name="id_topik" class="form-select @error('id_topik') is-invalid @enderror" aria-label="Default select example">
-                        <option>Pilih Topik</option>
+                        <option>--Pilih Topik--</option>
                         @foreach($topik as $top)
                         <option {{ $data['id_topik'] == $top['id'] ? 'selected' : '' }} value="{{ $top['id'] }}">{{ $top['nama'] }}</option>
                         @endforeach
@@ -262,13 +271,13 @@
                       <div class="form-check">
                         <input class="form-check-input" type="radio" name="status_se" id="gridRadios1" value="0" {{ $data->status_se == 0 ? 'checked' : '' }}>
                         <label class="form-check-label" for="gridRadios1">
-                          Internal
+                          {{ $data->ditujukan == 0 ? 'Internal General' : 'Departemen'}}
                         </label>
                       </div>
                       <div class="form-check">
                         <input class="form-check-input" type="radio" name="status_se" id="gridRadios2" value="1" {{ $data->status_se == 1 ? 'checked' : '' }}>
                         <label class="form-check-label" for="gridRadios2">
-                          Eksternal
+                          {{ $data->ditujukan == 0 ? 'Ekternal General' : 'Eksternal Pelanggan'}}
                         </label>
                       </div>
                     </div>
@@ -381,6 +390,40 @@
                 <!-- <div class="text-center">
                   <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                 </div> -->
+              </div>
+              <div class="tab-pane fade" id="log">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">Log Pengerjaan</h5>
+                  </div>
+                  <div class="card-body">
+                    <table class="table table-borderless datatable">
+                      <thead>
+                        <tr>
+                          <th scope="col">No.</th>
+                          <th scope="col">Pegawai</th>
+                          <th scope="col">Jabatan / Divisi</th>
+                          <th scope="col">Nilai</th>
+                          <th scope="col">Waktu Pengerjaan</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @php
+                        $i=1;
+                        @endphp
+                        @foreach($history_nilai as $log)
+                        <tr>
+                          <td>{{ $i++ }}</td>
+                          <td>{{ $log->users->name }}</td>
+                          <td>{{ $log->users->jabatan->nama.' - '.$log->users->departemen->nama }}</td>
+                          <td>{{ $log['nilai'].'/'.$log['nilai_max'] }}</td>
+                          <td>{{ date('d-m-Y H:i', strtotime($log['created_at'])) }}</td>
+                        </tr>
+                        @endforeach
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div><!-- End Bordered Tabs -->
           </div>

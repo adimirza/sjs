@@ -94,9 +94,6 @@
                     <div class="col-md-8 col-lg-9">
                       <select name="id_users" class="form-select @error('id_users') is-invalid @enderror" aria-label="Default select example" id="iduser">
                         <option>--Pilih Pegawai--</option>
-                        @foreach($user as $usr)
-                        <option {{ $usr['id'] == $data['id_users'] ? 'selected' : '' }} value="{{ $usr['id'] }}">{{ $usr['name'] }}</option>
-                        @endforeach
                       </select>
                       @error('id_users')
                       <div class="invalid-feedback">
@@ -164,7 +161,7 @@
                   <input type="hidden" name="id" value="{{ $data->id }}">
                   <div class="card">
                     <div class="card-header">
-                      Minutes of Meeting
+                      Catatan Kegiatan
                     </div>
                     <div class="card-body mt-3">
                       <textarea name="catatan" class="form-control">{{ $data->catatan }}</textarea>
@@ -210,7 +207,7 @@
 <script src="{{ url('/assets/js/sweetalert.min.js') }}"></script>
 <script type="text/javascript">
   $(document).ready(function() {
-    getuser('{{ old("id_departemen") }}', '{{ old("id_users") }}');
+    getuser('{{ $data->user->id_departemen }}', '{{ $data->id_users }}');
     $("#iddepartemen").change(function() {
       var id = $('#iddepartemen').val();
       var iduser = '';

@@ -123,10 +123,11 @@ class KotakMasuk extends Controller
         }
         $nilai = HistoryNilaiModel::where(['id_users' => auth()->user()->id, 'id_surat' => $id])->first();
         $data = SuratModel::find($id);
-        $soal = SoalModel::where('id_surat', $id)->get();
+        $soal = SoalModel::where('id_surat', $id)->get()->shuffle();
+        $history_nilai = HistoryNilaiModel::where(['id_surat' => $id, 'id_users' => auth()->user()->id])->orderBy('created_at', 'DESC')->get();
         $button = $this->button;
         $cont = $this;
         $title = 'Kotak Masuk';
-        return view('kotak_masuk.detail', compact('data', 'soal', 'title', 'nilai', 'button', 'cont'));
+        return view('kotak_masuk.detail', compact('data', 'soal', 'title', 'nilai', 'button', 'cont', 'history_nilai'));
     }
 }

@@ -9,6 +9,7 @@ use App\Models\RoleModel;
 use App\Models\UserModel as ModelsUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
@@ -82,6 +83,7 @@ class User extends Controller
                 'tanggal_lahir' => 'required',
                 'no_hp' => 'required',
                 'alamat' => 'required',
+                'no_bpjs' => 'required',
                 'tanggal_masuk' => 'required',
                 'tanggal_berakhir' => 'required',
                 'status' => 'required',
@@ -115,6 +117,7 @@ class User extends Controller
                 'tanggal_lahir' => $request->tanggal_lahir,
                 'no_hp' => $request->no_hp,
                 'alamat' => $request->alamat,
+                'no_bpjs' => $request->no_bpjs,
                 'tanggal_masuk' => $request->tanggal_masuk,
                 'tanggal_berakhir' => $request->tanggal_berakhir,
                 'status' => $request->status,
@@ -148,6 +151,7 @@ class User extends Controller
             'tanggal_lahir' => 'required',
             'no_hp' => 'required',
             'alamat' => 'required',
+            'no_bpjs' => 'required',
             'tanggal_masuk' => 'required',
             'tanggal_berakhir' => 'required',
             'status' => 'required',
@@ -166,6 +170,7 @@ class User extends Controller
                 'tanggal_lahir' => $request->tanggal_lahir,
                 'no_hp' => $request->no_hp,
                 'alamat' => $request->alamat,
+                'no_bpjs' => $request->no_bpjs,
                 'tanggal_masuk' => $request->tanggal_masuk,
                 'tanggal_berakhir' => $request->tanggal_berakhir,
                 'status' => $request->status,
@@ -190,9 +195,11 @@ class User extends Controller
         $image = $request->file('foto');
         $imagename = $request->id . time() . '.' . $image->extension();
         $destinationPath = public_path('upload/image/profil');
-
+        if (!File::isDirectory($destinationPath)) {
+            File::makeDirectory($destinationPath, 0755, true, true);
+        }
         $img = Image::make($image->path());
-        $img->resize(200, null, function ($constraint) {
+        $img->resize(800, null, function ($constraint) {
             $constraint->aspectRatio();
         })->save($destinationPath . '/' . $imagename);
 
@@ -204,6 +211,25 @@ class User extends Controller
         if(auth()->user()->id_jabatan == 4){
             return redirect($this->button->formEtc('Profil Pegawai'))->with('success', 'Edit data berhasil');
         }
+        return redirect($this->button->formEtc('Pegawai') . '/info/' . $request->id)->with('success', 'Edit data berhasil');
+    }
+
+    public function upload_cv(Request $request)
+    {
+        $uploadPath = public_path('upload/file_cv/');
+
+        if (!File::isDirectory($uploadPath)) {
+            File::makeDirectory($uploadPath, 0755, true, true);
+        }
+        $file = $request->file('file_surat');
+        $extension = $file->getClientOriginalExtension();
+        $rename = $request->id.'_'.date('YmdHis') . $extension;
+
+        $surat = ModelsUser::findOrFail($request->id);
+        $surat->update([
+            'file_cv' => $rename,
+            'updated_by' => auth()->user()->email,
+        ]);
         return redirect($this->button->formEtc('Pegawai') . '/info/' . $request->id)->with('success', 'Edit data berhasil');
     }
 

@@ -7,6 +7,7 @@ use App\Models\DepartemenModel;
 use App\Models\RapatModel;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
 
 class Rapat extends Controller
@@ -118,7 +119,9 @@ class Rapat extends Controller
         $image = $request->file('foto');
         $imagename = $request->id . time() . '.' . $image->extension();
         $destinationPath = public_path('upload/image/rapat');
-
+        if (!File::isDirectory($destinationPath)) {
+            File::makeDirectory($destinationPath, 0755, true, true);
+        }
         $img = Image::make($image->path());
         $img->resize(800, null, function ($constraint) {
             $constraint->aspectRatio();

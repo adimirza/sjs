@@ -167,6 +167,17 @@
           </div>
         </div>
         <div class="row mb-3">
+          <label class="col-md-4 col-lg-3 col-form-label">No BPJS</label>
+          <div class="col-md-8 col-lg-9">
+            <input name="no_bpjs" type="text" class="form-control @error('no_bpjs') is-invalid @enderror" value="{{ old('no_bpjs') }}">
+            @error('no_bpjs')
+            <div class="invalid-feedback">
+              {{ $message }}
+            </div>
+            @enderror
+          </div>
+        </div>
+        <div class="row mb-3">
           <label for="Job" class="col-md-4 col-lg-3 col-form-label">Status</label>
           <div class="col-md-8 col-lg-9">
             <select name="status" class="form-select @error('status') is-invalid @enderror" aria-label="Default select example">

@@ -33,9 +33,11 @@ class UserModel extends Authenticatable
         'tanggal_lahir',
         'no_hp',
         'alamat',
+        'no_bpjs',
         'tanggal_masuk',
         'tanggal_berakhir',
         'foto',
+        'file_cv',
         'status'
     ];
 

@@ -90,8 +90,13 @@
         <div class="col-md-12 col-lg-12">
           <select name="status_se" class="form-select @error('status_se') is-invalid @enderror" aria-label="Default select example">
             <option>--Pilih Status SE--</option>
-            <option {{ old('status_se') == 0 ? 'selected' : '' }} value="0">Internal</option>
-            <option {{ old('status_se') == 1 ? 'selected' : '' }} value="1">External</option>
+            @if($cont->jenis == 'umum')
+              <option {{ old('status_se') == '0' ? 'selected' : '' }} value="0">Internal General</option>
+              <option {{ old('status_se') == '1' ? 'selected' : '' }} value="1">External General</option>
+            @else
+              <option {{ old('status_se') == '0' ? 'selected' : '' }} value="0">Departemen</option>
+              <option {{ old('status_se') == '1' ? 'selected' : '' }} value="1">External Pelanggan</option>
+            @endif
            </select>
           @error('status_se')
           <div class="invalid-feedback">

@@ -110,6 +110,10 @@
                   <div class="col-lg-9 col-md-8">{{ $data->alamat }}</div>
                 </div>
                 <div class="row">
+                  <div class="col-lg-3 col-md-4 label">No BPJS</div>
+                  <div class="col-lg-9 col-md-8">{{ $data->no_bpjs }}</div>
+                </div>
+                <div class="row">
                   <div class="col-lg-3 col-md-4 label">Tanggal Masuk</div>
                   <div class="col-lg-9 col-md-8">{{ date('d F Y', strtotime($data->tanggal_masuk)) }}</div>
                 </div>
@@ -254,6 +258,17 @@
                     <div class="col-md-8 col-lg-9">
                       <textarea name="alamat" class="form-control @error('alamat') is-invalid @enderror" style="height: 100px">{{ $data->alamat }}</textarea>
                       @error('alamat')
+                      <div class="invalid-feedback">
+                        {{ $message }}
+                      </div>
+                      @enderror
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label class="col-md-4 col-lg-3 col-form-label">No BPJS</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="no_bpjs" type="text" class="form-control @error('no_bpjs') is-invalid @enderror" value="{{ $data->no_bpjs }}">
+                      @error('no_bpjs')
                       <div class="invalid-feedback">
                         {{ $message }}
                       </div>
