@@ -208,4 +208,18 @@ class Surat extends Controller
         $result['tuntas'] = LogSuratModel::where(['id_surat' => $id_surat, 'status' => 2])->count();
         return $result;
     }
+
+    public function getDataLog(Request $request, $id_surat)
+    {
+        // print_r($request->st);
+        // die;
+        $log = LogSuratModel::select('name', 'jabatan.nama as jabatan', 'departemen.nama as departemen', 
+                                    'log_surat.created_at as tanggal')
+                            ->join('users', 'users.id', '=', 'log_surat.id_users')
+                            ->join('jabatan', 'jabatan.id', '=', 'users.id_jabatan')
+                            ->join('departemen', 'departemen.id', '=', 'users.id_departemen')
+                            ->where(['id_surat' => $id_surat, 'log_surat.status' => $request->st])
+                            ->get();
+        return $log;            
+    }
 }

@@ -15,7 +15,7 @@
       <div class="col-xl-4">
         <div class="card">
           <div class="card-body pt-4">
-            <img src="{{ url('upload/image/tugas') }}{{$data->foto ? '/'.$data->foto : '/person-icon.png'}}" width="100%">
+            <img src="{{$data->foto ? url('upload/image/tugas').'/'.$data->foto : asset('/assets/img/no-image.png') }}" width="100%">
           </div>
           <div class="card-footer text-center">
             <span><button class="btn btn-info" data-bs-target="#upload_foto" data-bs-toggle="modal">Upload Foto</button></span>

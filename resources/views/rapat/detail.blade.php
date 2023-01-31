@@ -15,7 +15,7 @@
       <div class="col-xl-4">
         <div class="card">
           <div class="card-body pt-4">
-            <img src="{{ url('upload/image/rapat') }}{{$data->foto ? '/'.$data->foto : '/person-icon.png'}}" width="100%">
+            <img src="{{$data->foto ? url('upload/image/rapat').'/'.$data->foto : asset('/assets/img/no-image.png') }}" width="100%">
           </div>
           @if(auth()->user()->jabatan->role->nama != 'Member')
           <div class="card-footer text-center">

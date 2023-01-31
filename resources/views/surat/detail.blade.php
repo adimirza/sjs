@@ -30,29 +30,28 @@
             <div class="progress mt-3">
               <div class="progress-bar" role="progressbar" style="width: {{ number_format(($baca/$target)*100, 2, '.', ',') }}%" aria-valuenow="{{ $baca }}" aria-valuemin="0" aria-valuemax="{{ $target }}" title="{{ number_format(($baca/$target)*100, 2, '.', ',') }}%">{{ number_format(($baca/$target)*100, 2, '.', ',') }}%</div>
             </div>
-            <p> SE Dilihat</p>
+            <p> SE Dilihat <small style="font-size: x-small;"><a href="#" onclick="getDataLog({{ $data->id }})" data-st="1" data-bs-toggle="modal" data-bs-target="#log">Lihat Detail</a></small></p>
             <div class="progress mt-3">
               <div class="progress-bar" role="progressbar" style="width: {{ number_format(($tuntas/$target)*100, 2, '.', ',') }}%" aria-valuenow="{{ $tuntas }}" aria-valuemin="0" aria-valuemax="{{ $target }}" title="{{ number_format(($tuntas/$target)*100, 2, '.', ',') }}%">{{ number_format(($tuntas/$target)*100, 2, '.', ',') }}%</div>
             </div>
-            <p>SE Tuntas</p>
+            <p>SE Tuntas <small style="font-size: x-small;"><a href="#" onclick="getDataLog({{ $data->id }})" data-st="2" data-bs-toggle="modal" data-bs-target="#log">Lihat Detail</a></small></p>
             <div class="progress mt-3">
               <div class="progress-bar" role="progressbar" style="width: {{ number_format(($belum/$target)*100, 2, '.', ',') }}%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="{{ $target }}" title="{{ number_format(($belum/$target)*100, 2, '.', ',') }}%">{{ number_format(($belum/$target)*100, 2, '.', ',') }}%</div>
             </div>
             <p>Belum diketahui</p><!-- End Progress Bars with labels -->
             <br>
             <!-- Bordered Tabs Justified -->
-            <ul class="nav nav-tabs nav-tabs-bordered d-flex" id="borderedTabJustified" role="tablist">
+            <!-- <ul class="nav nav-tabs nav-tabs-bordered d-flex" id="borderedTabJustified" role="tablist">
               <li class="nav-item flex-fill" role="presentation">
                 <button class="nav-link w-100 active" id="home-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-home" type="button" role="tab" aria-controls="home" aria-selected="true"><i class="bi bi-eye-fill"></i> &nbsp; SE Dilihat</button>
               </li>
               <li class="nav-item flex-fill" role="presentation">
                 <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-profile" type="button" role="tab" aria-controls="profile" aria-selected="false"><i class="bi bi-patch-check-fill"></i> &nbsp; SE Tuntas</button>
               </li>
-            </ul>
-            <div class="tab-content pt-2" id="borderedTabJustifiedContent">
+            </ul> -->
+            <!-- <div class="tab-content pt-2" id="borderedTabJustifiedContent">
               <div class="tab-pane fade active show" id="bordered-justified-home" role="tabpanel" aria-labelledby="home-tab">
-                <!-- Active Table -->
-                <table class="table table-borderless">
+               <table class="table table-borderless">
                   <thead>
                     <tr>
                       <th scope="col">Nama</th>
@@ -88,7 +87,6 @@
                     </tr>
                   </tbody>
                 </table>
-                <!-- End Tables without borders -->
               </div>
               <div class="tab-pane fade" id="bordered-justified-profile" role="tabpanel" aria-labelledby="profile-tab">
                 <table class="table table-borderless">
@@ -113,7 +111,7 @@
                   </tbody>
                 </table>
               </div>
-            </div><!-- End Bordered Tabs Justified -->
+            </div> -->
           </div>
         </div>
       </div>
@@ -581,6 +579,34 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="log" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="judul_log"></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <table class="table table-borderless datatable">
+          <thead>
+            <tr>
+              <th scope="col">No.</th>
+              <th scope="col">Pegawai</th>
+              <th scope="col">Jabatan / Divisi</th>
+              <th scope="col">Tanggal</th>
+            </tr>
+          </thead>
+          <tbody id="tabel_log">
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
 @section('footlib_req')
 <script src="{{ url('/assets/js/sweetalert.min.js') }}"></script>
@@ -620,6 +646,30 @@
         $('#soal-pilihan_c').val(data.pilihan_c);
         $('#soal-pilihan_d').val(data.pilihan_d);
         $('#soal-kunci_jawaban').val(data.kunci_jawaban).change();
+      }
+    })
+  }
+
+  function getDataLog(st) {
+    console.log(st);
+    $.ajax({
+      url: "{{ url('surat/getdatalog/'.$data->id) }}",
+      data: {
+        "st": st
+      },
+      type: "GET",
+      dataType: "JSON",
+      success: function(data) {
+        var html = '';
+        var i;
+        for (i = 0; i < data.length; i++) {
+          html += '<tr>';
+          html += '<td>' + data[i].name + '</td>';
+          html += '<td>' + data[i].jabatan + '-' + data[i].departemen + '</td>';
+          html += '<td>' + data[i].tanggal + '</td>';
+          html += '</tr>';
+        }
+        $('#tabel_log').html(html);
       }
     })
   }
