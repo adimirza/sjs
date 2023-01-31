@@ -119,10 +119,11 @@ class Rapat extends Controller
         $data = RapatModel::find($id);
         $user = UserModel::all();
         $departemen = DepartemenModel::all();
+        $log_rapat = LogRapatModel::where('id_rapat', $id)->get();
         $button = $this->button;
         $title = 'Rapat';
         $cont = $this;
-        return view('rapat.detail', compact('data', 'user', 'departemen', 'title', 'button', 'cont'));
+        return view('rapat.detail', compact('data', 'user', 'departemen', 'log_rapat', 'title', 'button', 'cont'));
     }
 
     public function update_foto(Request $request)

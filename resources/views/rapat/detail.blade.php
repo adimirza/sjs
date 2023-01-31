@@ -17,9 +17,11 @@
           <div class="card-body pt-4">
             <img src="{{ url('upload/image/rapat') }}{{$data->foto ? '/'.$data->foto : '/person-icon.png'}}" width="100%">
           </div>
+          @if(auth()->user()->jabatan->role->nama != 'Member')
           <div class="card-footer text-center">
             <span><button class="btn btn-info" data-bs-target="#upload_foto" data-bs-toggle="modal">Upload Foto</button></span>
           </div>
+          @endif
         </div>
       </div>
       <div class="col-xl-8">
@@ -38,6 +40,9 @@
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#catatan">Catatan</button>
               </li>
               @endif
+              <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#konfirmasi">Konfirmasi Kehadiran</button>
+              </li>
             </ul>
             <div class="tab-content pt-2">
               <div class="tab-pane fade show active profile-overview" id="overview">
@@ -199,6 +204,40 @@
                     </div>
                   </div>
                 </form>
+              </div>
+              <div class="tab-pane fade" id="konfirmasi">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">Konfirmasi Kehadiran</h5>
+                  </div>
+                  <div class="card-body">
+                    <table class="table table-borderless datatable">
+                      <thead>
+                        <tr>
+                          <th scope="col">No.</th>
+                          <th scope="col">Pegawai</th>
+                          <th scope="col">Jabatan / Divisi</th>
+                          <th scope="col">Hadir</th>
+                          <th scope="col">Keterangan</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @php
+                        $i=1;
+                        @endphp
+                        @foreach($log_rapat as $log)
+                        <tr>
+                          <td>{{ $i++ }}</td>
+                          <td>{{ $log->user->name }}</td>
+                          <td>{{ $log->user->jabatan->nama.' - '.$log->user->departemen->nama }}</td>
+                          <td>{!! $log['konfirmasi'] ? '<span class="badge bg-success">Hadir</span>' : '<span class="badge bg-danger">Tidak Hadir</span>' !!}</td>
+                          <td>{{ $log['keterangan'] }}</td>
+                        </tr>
+                        @endforeach
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div><!-- End Bordered Tabs -->
           </div>
