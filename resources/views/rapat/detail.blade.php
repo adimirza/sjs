@@ -30,12 +30,14 @@
               <li class="nav-item">
                 <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#overview">Detail</button>
               </li>
+              @if(auth()->user()->jabatan->role->nama != 'Member')
               <li class="nav-item">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#edit">Sunting</button>
               </li>
               <li class="nav-item">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#catatan">Catatan</button>
               </li>
+              @endif
             </ul>
             <div class="tab-content pt-2">
               <div class="tab-pane fade show active profile-overview" id="overview">

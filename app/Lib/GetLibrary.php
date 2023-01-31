@@ -2,6 +2,7 @@
 
 namespace App\Lib;
 
+use App\Models\LogRapatModel;
 use App\Models\LogSuratModel;
 use App\Models\SuratModel;
 
@@ -10,6 +11,7 @@ class GetLibrary
   public $bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 
                   'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
   public $stLogSurat = ['Belum Dibaca', 'Sudah Dibaca', 'Tuntas', 'Belum Tuntas'];
+  
   public function getNotifSurat(){
     $id_departemen = auth()->user()->id_departemen;
     $id_user = auth()->user()->id;
@@ -24,6 +26,13 @@ class GetLibrary
         $result['blmTuntas']++;
       }
     }
+    return $result;
+  }
+
+  public function getKonfirmasiRapat($id_rapat)
+  {
+    $id_user = auth()->user()->id;
+    $result = LogRapatModel::where(['id_users' => $id_user, 'id_rapat' => $id_rapat])->first();
     return $result;
   }
 }

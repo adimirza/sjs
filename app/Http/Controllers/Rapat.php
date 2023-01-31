@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Lib\GetButton;
+use App\Lib\GetLibrary;
 use App\Models\DepartemenModel;
+use App\Models\LogRapatModel;
 use App\Models\RapatModel;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
@@ -14,10 +16,12 @@ class Rapat extends Controller
 {
 
     public $button;
+    public $lib;
 
     public function __construct()
     {
         $this->button = new GetButton;
+        $this->lib = new GetLibrary;
     }
 
     public function index(Request $request)
@@ -150,5 +154,23 @@ class Rapat extends Controller
             'updated_by' => auth()->user()->username,
         ]);
         return redirect($this->button->formEtc('Rapat') . '/detail/' . $request->id)->with('success', 'Edit catatan berhasil');
+    }
+
+    public function konfirmasi(Request $request)
+    {
+        $data = [
+            'konfirmasi' => $request->konfirmasi,
+            'keterangan' => $request->keterangan,
+            'updated_by' => auth()->user()->username,
+        ];
+        if($request->st == 'input'){
+            $data['id_users'] = auth()->user()->id;
+            $data['id_rapat'] = $request->id;
+            $data['created_by'] = auth()->user()->username;
+            LogRapatModel::create($data);
+        }else{
+            LogRapatModel::findOrFail($request->id)->update($data);
+        }
+        return redirect($this->button->formEtc('Rapat'));
     }
 }

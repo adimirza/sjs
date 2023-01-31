@@ -115,6 +115,7 @@ Route::match(['get', 'post'],'/rapat/add', [Rapat::class, 'store'])->middleware(
 Route::post('/rapat/edit', [Rapat::class, 'update'])->middleware(['auth', 'permission:rapat,update']);
 Route::post('/rapat/edit_catatan', [Rapat::class, 'update_catatan'])->middleware(['auth', 'permission:rapat,update']);
 Route::post('/rapat/edit_foto', [Rapat::class, 'update_foto'])->middleware(['auth', 'permission:rapat,update']);
+Route::post('/rapat/konfirmasi', [Rapat::class, 'konfirmasi'])->middleware(['auth', 'permission:rapat,update']);
 Route::delete('/rapat/delete/{id}', [Rapat::class, 'delete'])->middleware(['auth', 'permission:rapat,delete']);
 Route::get('/rapat/detail/{id}', [Rapat::class, 'detail'])->middleware(['auth', 'permission:rapat,read']);
 
