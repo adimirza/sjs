@@ -23,16 +23,31 @@ class Tugas extends Controller
     public function index(Request $request)
     {
         $title = 'Tugas';
+        $id_departemen = '';
+        $id_pegawai = '';
+        $tgl_awal = '';
+        $tgl_akhir = '';
         if(auth()->user()->jabatan->role->nama == 'Member'){
             $id_users = auth()->user()->id;
             $data = TugasModel::where("id_users", $id_users)
                                 ->orderBy("tanggal", "DESC")->get();
         }else{
-            $data = TugasModel::orderBy("tanggal", "DESC")->get();
+            if($request->all()){
+                $id_departemen = $request->id_departemen;
+                $id_pegawai = $request->id_pegawai;
+                $tgl_awal = date('Y-m-d', strtotime($request->tgl_awal));
+                $tgl_akhir = date('Y-m-d', strtotime($request->tgl_akhir));
+                $data = TugasModel::whereRaw("id_users = $id_pegawai AND DATE_FORMAT(tanggal, '%Y-%m-%d') BETWEEN '$tgl_awal' AND '$tgl_akhir'")->orderBy("tanggal", "DESC")->get();
+            }else{
+                $data = TugasModel::orderBy("tanggal", "DESC")->get();
+            }
         }
         $button = $this->button;
         $cont = $this;
-        return view('tugas.index', compact('data', 'title', 'button', 'cont'));
+        
+        $departemen = DepartemenModel::all();
+        return view('tugas.index', compact('data', 'title', 'button', 'cont', 'departemen', 
+                                            'id_departemen', 'id_pegawai', 'tgl_awal', 'tgl_akhir'));
     }
 
     public function store(Request $request)
@@ -41,6 +56,7 @@ class Tugas extends Controller
         if ($request->isMethod('POST')) {
             $validatedData = $request->validate([
                 'id_users' => 'required',
+                'nama_customer' => 'required',
                 'deskripsi' => 'required',
                 'tanggal' => 'required',
                 'lokasi' => 'required',
@@ -49,6 +65,7 @@ class Tugas extends Controller
             if ($validatedData) {
                 $data = [
                     'id_users' => $request->id_users,
+                    'nama_customer' => $request->nama_customer,
                     'deskripsi' => $request->deskripsi,
                     'tanggal' => $request->tanggal,
                     'lokasi' => $request->lokasi,
@@ -73,6 +90,7 @@ class Tugas extends Controller
         $rapat = TugasModel::findOrFail($request->id);
         $validatedData = $request->validate([
             'id_users' => 'required',
+            'nama_customer' => 'required',
             'deskripsi' => 'required',
             'tanggal' => 'required',
             'lokasi' => 'required',
@@ -82,6 +100,7 @@ class Tugas extends Controller
         if ($validatedData) {
             $rapat->update([
                 'id_users' => $request->id_users,
+                'nama_customer' => $request->nama_customer,
                 'deskripsi' => $request->deskripsi,
                 'tanggal' => $request->tanggal,
                 'lokasi' => $request->lokasi,

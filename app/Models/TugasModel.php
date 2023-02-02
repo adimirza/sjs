@@ -11,6 +11,7 @@ class TugasModel extends Model
     protected $table = 'tugas';
     protected $fillable = [
         'id_users',
+        'nama_customer',
         'deskripsi',
         'tanggal',
         'lokasi',

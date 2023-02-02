@@ -49,6 +49,10 @@
                   <div class="col-lg-9 col-md-8">{{ $data->user->departemen->nama }}</div>
                 </div>
                 <div class="row">
+                  <div class="col-lg-3 col-md-4 label">Nama Customer</div>
+                  <div class="col-lg-9 col-md-8">{{ $data->nama_customer }}</div>
+                </div>
+                <div class="row">
                   <div class="col-lg-3 col-md-4 label">Deskripsi Tugas</div>
                   <div class="col-lg-9 col-md-8">{{ $data->deskripsi }}</div>
                 </div>
@@ -106,6 +110,17 @@
                   @else
                   <input type="hidden" name="id_users" value="{{ auth()->user()->id }}">
                   @endif
+                  <div class="row mb-3">
+                    <label class="col-md-4 col-lg-3 col-form-label">Nama Customer</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input type="text" name="nama_customer" class="form-control @error('nama_customer') is-invalid @enderror" value="{{ $data->nama_customer }}">
+                      @error('nama_customer')
+                      <div class="invalid-feedback">
+                        {{ $message }}
+                      </div>
+                      @enderror
+                    </div>
+                  </div>
                   <div class="row mb-3">
                     <label class="col-md-4 col-lg-3 col-form-label">Deskripsi Tugas</label>
                     <div class="col-md-8 col-lg-9">

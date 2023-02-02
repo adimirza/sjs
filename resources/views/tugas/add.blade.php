@@ -54,6 +54,17 @@
         <input type="hidden" name="id_users" value="{{ auth()->user()->id }}">
         @endif
         <div class="form-group">
+          <label class="col-md-4 col-lg-3 col-form-label">Nama Customer</label>
+          <div class="col-md-12 col-lg-12">
+            <input type="text" name="nama_customer" class="form-control @error('nama_customer') is-invalid @enderror" value="{{ old('nama_customer') }}">
+            @error('nama_customer')
+            <div class="invalid-feedback">
+              {{ $message }}
+            </div>
+            @enderror
+          </div>
+        </div>
+        <div class="form-group">
           <label class="col-md-4 col-lg-3 col-form-label">Deskripsi Tugas</label>
           <div class="col-md-12 col-lg-12">
             <textarea name="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror">{{ old('deskripsi') }}</textarea>
