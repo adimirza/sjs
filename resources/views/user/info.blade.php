@@ -406,7 +406,7 @@
         <h1 class="modal-title fs-5" id="exampleModalLabel">Upload Foto Profil</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form action="{{ url($button->formEtc('Pegawai')).'/ganti_foto' }}" method="POST" enctype="multipart/form-data">
+      <form action="{{ url($button->formEtc('Pegawai') ? $button->formEtc('Pegawai') : $button->formEtc('Profil Pegawai')).'/ganti_foto' }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="modal-body">
           <div class="form-group">
