@@ -651,7 +651,11 @@
   }
 
   function getDataLog(st) {
-    console.log(st);
+    if(st == 1){
+      $('#judul_log').html('SE Dilihat');
+    }else if(st == 2){
+      $('#judul_log').html('SE Tuntas');
+    }
     $.ajax({
       url: "{{ url('surat/getdatalog/'.$data->id) }}",
       data: {
