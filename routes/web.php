@@ -162,4 +162,5 @@ Route::get('/login', [Login::class, 'index'])->name('login')->middleware('guest'
 Route::get('/register', [Login::class, 'register'])->middleware('guest');
 Route::post('/register/store', [Login::class, 'store'])->middleware('guest');
 Route::post('/proses_login', [Login::class, 'proses_login']);
+Route::get('/proses_login', [Login::class, 'index']);
 Route::get('/logout', [Login::class, 'logout']);

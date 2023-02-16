@@ -30,11 +30,11 @@
             <div class="progress mt-3">
               <div class="progress-bar" role="progressbar" style="width: {{ number_format(($baca/$target)*100, 2, '.', ',') }}%" aria-valuenow="{{ $baca }}" aria-valuemin="0" aria-valuemax="{{ $target }}" title="{{ number_format(($baca/$target)*100, 2, '.', ',') }}%">{{ number_format(($baca/$target)*100, 2, '.', ',') }}%</div>
             </div>
-            <p> SE Dilihat <small style="font-size: x-small;"><a href="#" onclick="getDataLog({{ $data->id }})" data-st="1" data-bs-toggle="modal" data-bs-target="#log">Lihat Detail</a></small></p>
+            <p> SE Dilihat <small style="font-size: x-small;"><a href="#" onclick="getDataLog(1)" data-st="1" data-bs-toggle="modal" data-bs-target="#log_surat">Lihat Detail</a></small></p>
             <div class="progress mt-3">
               <div class="progress-bar" role="progressbar" style="width: {{ number_format(($tuntas/$target)*100, 2, '.', ',') }}%" aria-valuenow="{{ $tuntas }}" aria-valuemin="0" aria-valuemax="{{ $target }}" title="{{ number_format(($tuntas/$target)*100, 2, '.', ',') }}%">{{ number_format(($tuntas/$target)*100, 2, '.', ',') }}%</div>
             </div>
-            <p>SE Tuntas <small style="font-size: x-small;"><a href="#" onclick="getDataLog({{ $data->id }})" data-st="2" data-bs-toggle="modal" data-bs-target="#log">Lihat Detail</a></small></p>
+            <p>SE Tuntas <small style="font-size: x-small;"><a href="#" onclick="getDataLog(2)" data-st="2" data-bs-toggle="modal" data-bs-target="#log_surat">Lihat Detail</a></small></p>
             <div class="progress mt-3">
               <div class="progress-bar" role="progressbar" style="width: {{ number_format(($belum/$target)*100, 2, '.', ',') }}%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="{{ $target }}" title="{{ number_format(($belum/$target)*100, 2, '.', ',') }}%">{{ number_format(($belum/$target)*100, 2, '.', ',') }}%</div>
             </div>
@@ -579,7 +579,7 @@
     </div>
   </div>
 </div>
-<div class="modal fade" id="log" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="log_surat" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -662,12 +662,15 @@
       success: function(data) {
         var html = '';
         var i;
+        var no = 1;
         for (i = 0; i < data.length; i++) {
           html += '<tr>';
+          html += '<td>' + no + '</td>';
           html += '<td>' + data[i].name + '</td>';
           html += '<td>' + data[i].jabatan + '-' + data[i].departemen + '</td>';
           html += '<td>' + data[i].tanggal + '</td>';
           html += '</tr>';
+          no++;
         }
         $('#tabel_log').html(html);
       }
