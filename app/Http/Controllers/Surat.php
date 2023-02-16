@@ -29,10 +29,10 @@ class Surat extends Controller
     {
         if ($this->jenis == 'umum') {
             $title = 'Surat Edaran Umum';
-            $data = SuratModel::where('ditujukan', 0)->get();
+            $data = SuratModel::where('ditujukan', 0)->orderBy('tanggal', 'DESC')->get();
         } else {
             $title = 'Surat Edaran Khusus';
-            $data = SuratModel::whereRaw('ditujukan != 0')->get();
+            $data = SuratModel::whereRaw('ditujukan != 0')->orderBy('tanggal', 'DESC')->get();
         }
         $button = $this->button;
         $cont = $this;
@@ -59,7 +59,7 @@ class Surat extends Controller
                 'file_surat' => 'required',
             ]);
             if ($validatedData) {
-                $uploadPath = public_path('upload/surat/');
+                $uploadPath = public_path('upload/surat/'.date('Y', strtotime($request->tanggal)).'/'.date('m', strtotime($request->tanggal)));
 
                 if (!File::isDirectory($uploadPath)) {
                     File::makeDirectory($uploadPath, 0755, true, true);
@@ -133,7 +133,7 @@ class Surat extends Controller
                 'status_terbit' => 0,
                 'updated_by' => auth()->user()->email,
             ]);
-            return redirect($this->button->formEtc($title).'/detail/'.$request->id)->with('success', 'Edit data berhasil');
+            return redirect($this->button->formEtc($title) . '/detail/' . $request->id)->with('success', 'Edit data berhasil');
         }
     }
 
@@ -170,33 +170,39 @@ class Surat extends Controller
 
     public function ganti_surat(Request $request)
     {
+        $surat = SuratModel::findOrFail($request->id);
         if ($this->jenis == 'umum') {
             $title = 'Surat Edaran Umum';
         } else {
             $title = 'Surat Edaran Khusus';
         }
-        $uploadPath = public_path('upload/surat/');
+        $uploadPath = public_path('upload/surat/'.date('Y', strtotime($surat->tanggal)).'/'.date('m', strtotime($surat->tanggal)));
 
         if (!File::isDirectory($uploadPath)) {
             File::makeDirectory($uploadPath, 0755, true, true);
         }
         $file = $request->file('file_surat');
         $extension = $file->getClientOriginalExtension();
-        $rename = date('YmdHis') . $extension;
+        $rename = date('YmdHis') .'.'. $extension;
 
-        $surat = SuratModel::findOrFail($request->id);
-        $surat->update([
-            'file_surat' => $rename,
-            'updated_by' => auth()->user()->email,
-        ]);
-        return redirect($this->button->formEtc($title).'/detail/'.$request->id)->with('success', 'Edit data berhasil');
+        if ($file->move($uploadPath, $rename)) {
+            $surat->update([
+                'file_surat' => $rename,
+                'updated_by' => auth()->user()->email,
+            ]);
+            return redirect($this->button->formEtc($title) . '/detail/' . $request->id)->with('success', 'Edit data berhasil.');
+        } else {
+            print_r('gagal');
+            die;
+            return redirect($this->button->formEtc($title) . '/detail/' . $request->id)->with('gagal', 'Edit data gagal.');
+        }
     }
 
     public function getTarget($id_departemen)
     {
-        if($id_departemen == 0){
+        if ($id_departemen == 0) {
             $user = UserModel::where('id_jabatan', 4)->count();
-        }else{
+        } else {
             $user = UserModel::where(['id_jabatan' => 4, 'id_departemen' => $id_departemen])->count();
         }
         return $user;
@@ -213,13 +219,17 @@ class Surat extends Controller
     {
         // print_r($request->st);
         // die;
-        $log = LogSuratModel::select('name', 'jabatan.nama as jabatan', 'departemen.nama as departemen', 
-                                    'log_surat.created_at as tanggal')
-                            ->join('users', 'users.id', '=', 'log_surat.id_users')
-                            ->join('jabatan', 'jabatan.id', '=', 'users.id_jabatan')
-                            ->join('departemen', 'departemen.id', '=', 'users.id_departemen')
-                            ->where(['id_surat' => $id_surat, 'log_surat.status' => $request->st])
-                            ->get();
-        return $log;            
+        $log = LogSuratModel::select(
+            'name',
+            'jabatan.nama as jabatan',
+            'departemen.nama as departemen',
+            'log_surat.created_at as tanggal'
+        )
+            ->join('users', 'users.id', '=', 'log_surat.id_users')
+            ->join('jabatan', 'jabatan.id', '=', 'users.id_jabatan')
+            ->join('departemen', 'departemen.id', '=', 'users.id_departemen')
+            ->where(['id_surat' => $id_surat, 'log_surat.status' => $request->st])
+            ->get();
+        return $log;
     }
 }

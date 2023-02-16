@@ -103,12 +103,15 @@ Route::match(['get', 'post'],'/surat/umum/add', [Surat::class, 'store'])->middle
 Route::post('/surat/umum/edit', [Surat::class, 'update'])->middleware(['auth', 'permission:surat edaran umum,update']);
 Route::delete('/surat/umum/delete/{id}', [Surat::class, 'delete'])->middleware(['auth', 'permission:surat edaran umum,delete']);
 Route::get('/surat/umum/detail/{id}', [Surat::class, 'detail'])->middleware(['auth', 'permission:surat edaran umum,read']);
+Route::post('/surat/umum/ganti_surat', [Surat::class, 'ganti_surat'])->middleware(['auth', 'permission:surat edaran umum,update']);
 
 Route::get('/surat/khusus/', [Surat::class, 'index'])->middleware(['auth', 'permission:surat edaran khusus,read']);
 Route::match(['get', 'post'],'/surat/khusus/add', [Surat::class, 'store'])->middleware(['auth', 'permission:surat edaran khusus,create']);
 Route::post('/surat/khusus/edit', [Surat::class, 'update'])->middleware(['auth', 'permission:surat edaran khusus,update']);
 Route::delete('/surat/khusus/delete/{id}', [Surat::class, 'delete'])->middleware(['auth', 'permission:surat edaran khusus,delete']);
 Route::get('/surat/khusus/detail/{id}', [Surat::class, 'detail'])->middleware(['auth', 'permission:surat edaran khusus,read']);
+Route::post('/surat/khusus/ganti_surat', [Surat::class, 'ganti_surat'])->middleware(['auth', 'permission:surat edaran khusus,update']);
+
 Route::get('/surat/getdatalog/{id}', [Surat::class, 'getDataLog'])->middleware(['auth', 'permission:surat edaran khusus,read']);
 
 Route::get('/rapat', [Rapat::class, 'index'])->middleware(['auth', 'permission:rapat,read']);

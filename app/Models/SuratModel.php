@@ -45,7 +45,7 @@ class SuratModel extends Model
     {
         $akhir = new DateTime($tanggal_berakhir);
         $sekarang = new DateTime(date('Y-m-d'));
-        $selisih = $sekarang->diff($akhir)->d;
+        $selisih = $sekarang->diff($akhir)->days;
         if($sekarang <= $akhir){
             $status = '<span class="badge bg-success">Aktif sampai '.$selisih.' hari</span>';
         }else{

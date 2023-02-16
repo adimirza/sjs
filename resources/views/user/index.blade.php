@@ -10,9 +10,9 @@
     </div>
     <!-- /.card-header -->
     <div class="card-body">
-    <form action="{{ url($button->formEtc('Pegawai')) }}" method="GET" class="d-inline">
-      <div class="row">
-        
+      <form action="{{ url($button->formEtc('Pegawai')) }}" method="GET" class="d-inline">
+        <div class="row">
+
           <div class="col-4">
             <select class="form-select" id="fil-idDepartement/Divisi" name="id_departemen" aria-label="Default select example" required="">
               <option value="">Pilih Departement/Divisi</option>
@@ -25,11 +25,11 @@
           <div class="col-1">
             <button type="submit" class="btn btn-primary">Pilih</button>
           </div>
-        
-        <!-- <div class="col-3">
+
+          <!-- <div class="col-3">
           <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#import">Import Anggota</button>
         </div> -->
-      </div>
+        </div>
       </form>
       <br>
       <table class="table table-borderless datatable">
