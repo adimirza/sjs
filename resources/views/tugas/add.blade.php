@@ -87,7 +87,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="col-md-4 col-lg-3 col-form-label">Lokasi</label>
+          <label class="col-md-4 col-lg-3 col-form-label">Lokasi (Link Google Map)</label>
           <div class="col-md-12 col-lg-12">
             <textarea name="lokasi" class="form-control @error('lokasi') is-invalid @enderror">{{ old('lokasi') }}</textarea>
             @error('lokasi')

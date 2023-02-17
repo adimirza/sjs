@@ -66,7 +66,7 @@
                 </div>
                 <div class="row">
                   <div class="col-lg-3 col-md-4 label">Lokasi</div>
-                  <div class="col-lg-9 col-md-8">{{ $data->lokasi }}</div>
+                  <div class="col-lg-9 col-md-8"><a href="{{$data->lokasi}}" target="_blank">Buka Lokasi</a></div>
                 </div>
                 <div class="row">
                   <div class="col-lg-3 col-md-4 label">Catatan</div>
@@ -144,7 +144,7 @@
                     </div>
                   </div>
                   <div class="row mb-3">
-                    <label class="col-md-4 col-lg-3 col-form-label">Lokasi</label>
+                    <label class="col-md-4 col-lg-3 col-form-label">Lokasi (Link Google Map)</label>
                     <div class="col-md-8 col-lg-9">
                       <textarea name="lokasi" class="form-control @error('lokasi') is-invalid @enderror">{{ $data->lokasi }}</textarea>
                       @error('lokasi')

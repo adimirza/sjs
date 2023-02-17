@@ -73,7 +73,7 @@
                 </div>
                 <div class="row">
                   <div class="col-lg-3 col-md-4 label">Link</div>
-                  <div class="col-lg-9 col-md-8">{{ $data->link }}</div>
+                  <div class="col-lg-9 col-md-8"><a href="{{$data->link}}" target="_blank">Buka Link</a></div>
                 </div>
               </div>
               <div class="tab-pane fade profile-edit pt-3" id="edit">
