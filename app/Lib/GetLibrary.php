@@ -4,6 +4,7 @@ namespace App\Lib;
 
 use App\Models\LogRapatModel;
 use App\Models\LogSuratModel;
+use App\Models\RapatModel;
 use App\Models\SuratModel;
 
 class GetLibrary
@@ -24,6 +25,20 @@ class GetLibrary
         $result['blmDibaca']++;
       }elseif($log['status'] == 3){
         $result['blmTuntas']++;
+      }
+    }
+    return $result;
+  }
+
+  public function getNotifRapat(){
+    $id_departemen = auth()->user()->id_departemen;
+    $id_user = auth()->user()->id;
+    $result['blmKonfirmasi'] = 0;
+    $rapat = RapatModel::whereRaw("id_departemen = $id_departemen OR id_departemen = 0")->get();
+    foreach($rapat as $rpt){
+      $log = LogRapatModel::where(["id_users" => $id_user, "id_rapat" => $rpt['id']])->first();
+      if(!$log){
+        $result['blmKonfirmasi']++;
       }
     }
     return $result;
