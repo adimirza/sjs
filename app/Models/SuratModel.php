@@ -59,7 +59,10 @@ class SuratModel extends Model
         $id_user = auth()->user()->id;
         $id_departemen = auth()->user()->id_departemen;
         $surat = SuratModel::selectRaw("surat.id, nomor_surat, keterangan_topik, id_user, ditujukan,
-                                        (SELECT status FROM log_surat WHERE id_users = $id_user AND id_surat = surat.id) as status")
+                                        (SELECT status FROM log_surat 
+                                        WHERE id_users = $id_user 
+                                        AND id_surat = surat.id 
+                                        ORDER BY created_at DESC LIMIT 1) as status")
                                     ->whereRaw("ditujukan = $id_departemen OR ditujukan = 0");
         return $surat;
     }
