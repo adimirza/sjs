@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Lib\GetButton;
 use App\Models\DepartemenModel;
+use App\Models\HistoryNilaiModel;
 use App\Models\JabatanModel;
+use App\Models\LogSuratModel;
 use App\Models\RoleModel;
+use App\Models\SuratModel;
 use App\Models\UserModel as ModelsUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -51,21 +54,55 @@ class User extends Controller
     public function info($id)
     {
         $title = 'Pegawai';
+        $uri = 'pegawai';
         $data = ModelsUser::find($id);
         $departemen = DepartemenModel::all();
         $jabatan = JabatanModel::all();
         $button = $this->button;
-        return view('user.info', compact('data', 'title', 'button', 'departemen', 'jabatan'));
+        $jml_paham_umum = HistoryNilaiModel::select("id_users")
+                                ->join("surat", "history_nilai.id_surat", "=", "surat.id")
+                                ->where(["nilai" => "nilai_max", 
+                                         "id_users" => $data->id,
+                                         "ditujukan" => 0])
+                                ->distinct()->count();
+        $jml_paham_divisi = HistoryNilaiModel::select("id_users")
+                            ->join("surat", "history_nilai.id_surat", "=", "surat.id")
+                            ->whereRaw("nilai = nilai_max AND ".
+                                        "id_users = ".$data->id." AND ".
+                                        "ditujukan = ".$data->id_departemen)
+                            ->distinct()->count();
+        $jml_umum = SuratModel::where("ditujukan", 0)->count();
+        $jml_divisi = SuratModel::where("ditujukan", $data->id_departemen)->count();
+        $log = LogSuratModel::where("id_users", $data->id)->get();
+        return view('user.info', compact('data', 'title', 'button', 'departemen', 'jabatan', 'jml_paham_umum',
+                                         'jml_paham_divisi', 'jml_umum', 'jml_divisi', 'log', 'uri'));
     }
 
     public function profil()
     {
         $title = 'Pegawai';
+        $uri = 'profil_pegawai';
         $data = ModelsUser::find(auth()->user()->id);
         $departemen = DepartemenModel::all();
         $jabatan = JabatanModel::all();
         $button = $this->button;
-        return view('user.info', compact('data', 'title', 'button', 'departemen', 'jabatan'));
+        $jml_paham_umum = HistoryNilaiModel::select("id_users")
+                                ->join("surat", "history_nilai.id_surat", "=", "surat.id")
+                                ->where(["nilai" => "nilai_max", 
+                                         "id_users" => $data->id,
+                                         "ditujukan" => 0])
+                                ->distinct()->count();
+        $jml_paham_divisi = HistoryNilaiModel::select("id_users")
+                            ->join("surat", "history_nilai.id_surat", "=", "surat.id")
+                            ->whereRaw("nilai = nilai_max AND ".
+                                        "id_users = ".$data->id." AND ".
+                                        "ditujukan = ".$data->id_departemen)
+                            ->distinct()->count();
+        $jml_umum = SuratModel::where("ditujukan", 0)->count();
+        $jml_divisi = SuratModel::where("ditujukan", $data->id_departemen)->count();
+        $log = LogSuratModel::where("id_users", $data->id)->get();
+        return view('user.info', compact('data', 'title', 'button', 'departemen', 'jabatan', 'jml_paham_umum',
+                                         'jml_paham_divisi', 'jml_umum', 'jml_divisi', 'log', 'uri'));
     }
 
     public function store(Request $request)
@@ -250,6 +287,10 @@ class User extends Controller
             'password' => 'required|confirmed|min:6',
             'password_confirmation' => 'required|min:6',
         ]);
+        $url = '/profil_pegawai';
+        if($request->uri == 'pegawai'){
+            $url = '/info/' . $request->id;
+        }
 
         if ($validatedData) {
             if (!Hash::check($request->old_password, auth()->user()->password)) {
@@ -260,9 +301,9 @@ class User extends Controller
                 'password' => Hash::make($request->password),
                 'updated_by' => auth()->user()->email,
             ]);
-            return redirect($this->button->formEtc('Pegawai') . '/info/' . $request->id)->with('success', 'Reset password berhasil');
+            return redirect($this->button->formEtc('Pegawai') . $url)->with('success', 'Reset password berhasil');
         }
-        return redirect($this->button->formEtc('Pegawai') . '/info/' . $request->id)->with('error', 'Reset password gagal.');
+        return redirect($this->button->formEtc('Pegawai') . $url)->with('error', 'Reset password gagal.');
     }
 
     public function delete($id)

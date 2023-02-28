@@ -44,6 +44,7 @@ Route::get('/api_example', [Api_example::class, 'index']);
 Route::get('/profil_pegawai', [User::class, 'profil'])->middleware(['auth', 'permission:profil pegawai,read']);
 Route::post('/profil_pegawai/edit', [User::class, 'update'])->middleware(['auth', 'permission:profil pegawai,update']);
 Route::post('/profil_pegawai/ganti_foto', [User::class, 'ganti_foto'])->middleware(['auth', 'permission:profil pegawai,update']);
+Route::post('/profil_pegawai/reset', [User::class, 'reset'])->middleware(['auth', 'permission:profil pegawai,update']);
 Route::get('/kelengkapan_pegawai', [Kelengkapan::class, 'index_staf'])->middleware(['auth', 'permission:kelengkapan pegawai,read']);
 Route::post('/kelengkapan_pegawai/edit', [Kelengkapan::class, 'update'])->middleware(['auth', 'permission:kelengkapan pegawai,update']);
 
@@ -54,7 +55,7 @@ Route::post('/pegawai/edit', [User::class, 'update'])->middleware(['auth', 'perm
 Route::post('/pegawai/ganti_foto', [User::class, 'ganti_foto'])->middleware(['auth', 'permission:pegawai,update']);
 Route::get('/pegawai/hapus_foto/{id}', [User::class, 'hapus_foto'])->middleware(['auth', 'permission:pegawai,read']);
 Route::delete('/pegawai/delete/{id}', [User::class, 'delete'])->middleware(['auth', 'permission:pegawai,delete']);
-Route::post('/pegawai/reset', [User::class, 'reset'])->middleware(['auth', 'permission:pegawai,read']);
+Route::post('/pegawai/reset', [User::class, 'reset'])->middleware(['auth', 'permission:pegawai,update']);
 
 Route::get('/role', [Role::class, 'index'])->middleware(['auth', 'permission:role,read']);
 Route::match(['get', 'post'],'/role/add', [Role::class, 'store'])->middleware(['auth', 'permission:role,create']);

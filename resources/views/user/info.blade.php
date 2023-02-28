@@ -31,13 +31,11 @@
             <!-- Progress Bars with labels-->
 
             <div class="progress">
-
-              <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">20/40</div>
+              <div class="progress-bar" role="progressbar" style="width: {{ ($jml_paham_umum/$jml_umum)*100 }}%" aria-valuenow="{{ $jml_paham_umum }}" aria-valuemin="0" aria-valuemax="100">{{ $jml_paham_umum }}/{{ $jml_umum }}</div>
             </div>
             <p>SE Umum</p>
-
             <div class="progress mt-3">
-              <div class="progress-bar" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">4/10</div>
+              <div class="progress-bar" role="progressbar" style="width: {{ ($jml_paham_divisi/$jml_divisi)*100 }}%" aria-valuenow="{{ $jml_paham_divisi }}" aria-valuemin="0" aria-valuemax="100">{{ $jml_paham_divisi }}/{{ $jml_divisi }}</div>
             </div>
             <p> SE Divisi</p>
           </div>
@@ -324,32 +322,35 @@
                     <tr>
                       <th scope="col">Tanggal</th>
                       <th scope="col">Aktivitas</th>
-                      <th scope="col">Hasil</th>
+                      <!-- <th scope="col">Hasil</th> -->
                     </tr>
                   </thead>
                   <tbody>
+                    @foreach($log as $lg)
                     <tr>
-                      <td>2016-05-25</td>
-                      <td>Buka SE Perekurtan Karyawan Internal</td>
-                      <td><span class="badge rounded-pill bg-success">Sukses</span></td>
+                      <td>{{ date('d F Y', strtotime($lg->created_at)) }}</td>
+                      <td>{{ $lg->ket_member($lg->status, $lg->id_surat) }}</td>
+                      <!-- <td><span class="badge rounded-pill bg-success">Sukses</span></td> -->
                     </tr>
-                    <tr>
+                    @endforeach
+                    <!-- <tr>
                       <td>2016-05-25</td>
                       <td>Mengerjakan Soal SE Perektrutan Karyawan Internal</td>
                       <td><span class="badge rounded-pill bg-warning text-dark">Belum Lulus</span></td>
-                    </tr>
+                    </tr> -->
                   </tbody>
                 </table>
               </div>
               <div class="tab-pane fade pt-3" id="profile-change-password">
                 <!-- Change Password Form -->
-                <form method="POST" action="{{ url($button->formEtc('Pegawai').'/reset') }}">
+                <form method="POST" action="{{ url($uri.'/reset') }}">
                   @csrf
                   <div class="row mb-3">
                     <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Password Kini</label>
                     <div class="col-md-8 col-lg-9">
                       <input name="old_password" type="password" class="form-control @error('old_password') is-invalid @enderror">
                       <input name="id" type="hidden" value="{{ $data->id }}">
+                      <input name="uri" type="hidden" value="{{ $uri }}">
                       @error('old_password')
                       <div class="invalid-feedback">
                         {{ $message }}

@@ -192,8 +192,6 @@ class Surat extends Controller
             ]);
             return redirect($this->button->formEtc($title) . '/detail/' . $request->id)->with('success', 'Edit data berhasil.');
         } else {
-            print_r('gagal');
-            die;
             return redirect($this->button->formEtc($title) . '/detail/' . $request->id)->with('gagal', 'Edit data gagal.');
         }
     }

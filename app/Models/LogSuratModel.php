@@ -45,14 +45,17 @@ class LogSuratModel extends Model
     public function ket_member($st, $id_surat)
     {
         $surat = SuratModel::find($id_surat);
-        $nilai = HistoryNilaiModel::where(['id_users' => auth()->user()->id, 'id_surat' => $id_surat])
-                                    ->orderBy('created_at', 'DESC')->first();
+        $ket = '';
+        if($surat){
+            $ket = $surat->keterangan_topik;
+        }
+
         switch ($st) {
             case 1:
-                return "Buka SE ".$surat->keterangan_topik.".";
+                return "Buka SE ".$ket.".";
                 break;
             case 2:
-                return "Mengerjakan Soal SE ".$surat->keterangan_topik.".";
+                return "Mengerjakan Soal SE ".$ket.".";
                 break;
             case 3:
                 return "SE Tuntas.";
