@@ -82,7 +82,7 @@
       <div class="form-group">
         <label class="col-md-4 col-lg-3 col-form-label">Tanggal Rapat</label>
         <div class="col-md-12 col-lg-12">
-          <input name="tanggal" type="date" class="form-control @error('tanggal') is-invalid @enderror" value="{{ old('tanggal') }}">
+          <input name="tanggal" id="tanggal" type="date" class="form-control @error('tanggal') is-invalid @enderror" value="{{ old('tanggal') }}">
           @error('tanggal')
           <div class="invalid-feedback">
             {{ $message }}
@@ -132,4 +132,20 @@
     </form><!-- End Profile Edit Form -->
   </div>
 </section>
+@endsection
+@section('footlib_req')
+<script>
+  $(function(){
+    var dtToday = new Date();
+    var month = dtToday.getMonth() + 1;
+    var day = dtToday.getDate();
+    var year = dtToday.getFullYear();
+    if(month < 10)
+        month = '0' + month.toString();
+    if(day < 10)
+        day = '0' + day.toString();
+    var maxDate = year + '-' + month + '-' + day;
+    $('#tanggal').attr('min', maxDate);
+  });
+</script>
 @endsection

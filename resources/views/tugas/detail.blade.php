@@ -135,7 +135,7 @@
                   <div class="row mb-3">
                     <label for="inputDate" class="col-md-4 col-lg-3 col-form-label">Tanggal</label>
                     <div class="col-md-8 col-lg-9">
-                      <input name="tanggal" type="datetime-local" class="form-control @error('tanggal') is-invalid @enderror" value="{{ $data->tanggal }}">
+                      <input name="tanggal" id="tanggal" type="datetime-local" class="form-control @error('tanggal') is-invalid @enderror" value="{{ $data->tanggal }}">
                       @error('tanggal')
                       <div class="invalid-feedback">
                         {{ $message }}
@@ -257,4 +257,18 @@
     })
   }
 </script>
+<!-- <script>
+  $(function(){
+    var dtToday = new Date();
+    var month = dtToday.getMonth() + 1;
+    var day = dtToday.getDate();
+    var year = dtToday.getFullYear();
+    if(month < 10)
+        month = '0' + month.toString();
+    if(day < 10)
+        day = '0' + day.toString();
+    var maxDate = year + '-' + month + '-' + day;
+    $('#tanggal').attr('min', maxDate);
+  });
+</script> -->
 @endsection

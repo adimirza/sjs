@@ -11,7 +11,17 @@ class GetLibrary
 {
   public $bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 
                   'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+  public $hari = ['Sun' => 'Minggu', 'Mon' => 'Senin', 'Tue' => 'Selasa', 'Wed' => 'Rabu', 
+                  'Thu' => 'Kamis', 'Fri' => 'Jumat', 'Sat' => 'Sabtu'];
   public $stLogSurat = ['Belum Dibaca', 'Sudah Dibaca', 'Tuntas', 'Belum Tuntas'];
+
+  public function forTanggal($tgl){
+    $hr = date('d', strtotime($tgl));
+    $bln = intval(date('m', strtotime($tgl)));
+    $thn = date('Y', strtotime($tgl));
+
+    return $hr.' '.$this->bulan[$bln].' '.$thn;
+  }
   
   public function getNotifSurat(){
     $id_departemen = auth()->user()->id_departemen;

@@ -33,4 +33,33 @@ class RapatModel extends Model
     {
         return $this->belongsTo(DepartemenModel::class, 'id_departemen');
     }
+
+    public function status($id)
+    {
+        $rapat = RapatModel::find($id);
+        $result = [
+            'id' => 0,
+            'keterangan' => 'Akan Datang',
+            'class' => 'primary'
+        ];
+        $now = date('Y-m-d H:i');
+        if($rapat){
+            $tgl_mulai = date('Y-m-d H:i', strtotime($rapat->tanggal.' '.$rapat->waktu_mulai));
+            $tgl_akhir = date('Y-m-d H:i', strtotime($rapat->tanggal.' '.$rapat->waktu_akhir));
+            if(($tgl_mulai <= $now) AND ($tgl_akhir > $now)){
+                $result = [
+                    'id' => 1,
+                    'keterangan' => 'Sedang Berlangsung',
+                    'class' => 'warning'
+                ];
+            }elseif($tgl_akhir <= $now){
+                $result = [
+                    'id' => 2,
+                    'keterangan' => 'Telah Berakhir',
+                    'class' => 'success'
+                ];
+            }
+        }
+        return $result;
+    }
 }
