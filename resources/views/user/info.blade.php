@@ -31,11 +31,11 @@
             <!-- Progress Bars with labels-->
 
             <div class="progress">
-              <div class="progress-bar" role="progressbar" style="width: {{ ($jml_paham_umum/$jml_umum)*100 }}%" aria-valuenow="{{ $jml_paham_umum }}" aria-valuemin="0" aria-valuemax="100">{{ $jml_paham_umum }}/{{ $jml_umum }}</div>
+              <div class="progress-bar" role="progressbar" style="width: {{ $jml_umum ? ($jml_paham_umum/$jml_umum)*100 : '0' }}%" aria-valuenow="{{ $jml_paham_umum }}" aria-valuemin="0" aria-valuemax="100">{{ $jml_paham_umum }}/{{ $jml_umum }}</div>
             </div>
             <p>SE Umum</p>
             <div class="progress mt-3">
-              <div class="progress-bar" role="progressbar" style="width: {{ ($jml_paham_divisi/$jml_divisi)*100 }}%" aria-valuenow="{{ $jml_paham_divisi }}" aria-valuemin="0" aria-valuemax="100">{{ $jml_paham_divisi }}/{{ $jml_divisi }}</div>
+              <div class="progress-bar" role="progressbar" style="width: {{ $jml_divisi ? ($jml_paham_divisi/$jml_divisi)*100 : '0' }}%" aria-valuenow="{{ $jml_paham_divisi }}" aria-valuemin="0" aria-valuemax="100">{{ $jml_paham_divisi }}/{{ $jml_divisi }}</div>
             </div>
             <p> SE Divisi</p>
           </div>

@@ -53,6 +53,7 @@ $profil = new GetProfilWeb;
               </div><!-- End Logo -->
               <div class="card">
                 <form action="{{ url('/proses_login') }}" method="post">
+                @csrf
                   <div class="card-body">
                     <div class="pt-4 pb-2">
                       <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
@@ -65,7 +66,7 @@ $profil = new GetProfilWeb;
                     </div>
                     @endif
 
-                    @csrf
+                    
                     <div class="col-12">
                       <label for="yourUsername" class="form-label">Username</label>
                       <div class="input-group has-validation">
