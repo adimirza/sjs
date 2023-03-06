@@ -124,14 +124,14 @@ Route::post('/rapat/konfirmasi', [Rapat::class, 'konfirmasi'])->middleware(['aut
 Route::delete('/rapat/delete/{id}', [Rapat::class, 'delete'])->middleware(['auth', 'permission:rapat,delete']);
 Route::get('/rapat/detail/{id}', [Rapat::class, 'detail'])->middleware(['auth', 'permission:rapat,read']);
 
-Route::get('/tugas', [Tugas::class, 'index'])->middleware(['auth', 'permission:tugas,read']);
-Route::match(['get', 'post'],'/tugas/add', [Tugas::class, 'store'])->middleware(['auth', 'permission:tugas,create']);
-Route::post('/tugas/edit', [Tugas::class, 'update'])->middleware(['auth', 'permission:tugas,update']);
-Route::post('/tugas/edit_catatan', [Tugas::class, 'update_catatan'])->middleware(['auth', 'permission:tugas,update']);
-Route::post('/tugas/edit_foto', [Tugas::class, 'update_foto'])->middleware(['auth', 'permission:tugas,update']);
-Route::delete('/tugas/delete/{id}', [Tugas::class, 'delete'])->middleware(['auth', 'permission:tugas,delete']);
-Route::get('/tugas/detail/{id}', [Tugas::class, 'detail'])->middleware(['auth', 'permission:tugas,read']);
-Route::get('/tugas/getdata', [Tugas::class, 'getdata'])->middleware(['auth', 'permission:tugas,read']);
+Route::get('/kunjungan', [Tugas::class, 'index'])->middleware(['auth', 'permission:kunjungan,read']);
+Route::match(['get', 'post'],'/kunjungan/add', [Tugas::class, 'store'])->middleware(['auth', 'permission:kunjungan,create']);
+Route::post('/kunjungan/edit', [Tugas::class, 'update'])->middleware(['auth', 'permission:kunjungan,update']);
+Route::post('/kunjungan/edit_catatan', [Tugas::class, 'update_catatan'])->middleware(['auth', 'permission:kunjungan,update']);
+Route::post('/kunjungan/edit_foto', [Tugas::class, 'update_foto'])->middleware(['auth', 'permission:kunjungan,update']);
+Route::delete('/kunjungan/delete/{id}', [Tugas::class, 'delete'])->middleware(['auth', 'permission:kunjungan,delete']);
+Route::get('/kunjungan/detail/{id}', [Tugas::class, 'detail'])->middleware(['auth', 'permission:kunjungan,read']);
+Route::get('/kunjungan/getdata', [Tugas::class, 'getdata'])->middleware(['auth', 'permission:kunjungan,read']);
 
 Route::post('/soal/add', [Soal::class, 'store'])->middleware(['auth', 'permission:soal,create']);
 Route::post('/soal/edit', [Soal::class, 'update'])->middleware(['auth', 'permission:soal,update']);

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api;
+use App\Http\Controllers\API\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,3 +21,4 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/user', [Api::class, 'user']);
+Route::post('login', [AuthController::class, 'login']);

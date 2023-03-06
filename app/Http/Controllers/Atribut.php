@@ -78,6 +78,6 @@ class Atribut extends Controller
     public function delete($id)
     {
         AtributModel::findOrFail($id)->delete();
-        return redirect($this->button->formEtc('Topik SE'))->with('success', 'Hapus data berhasil');
+        return redirect($this->button->formEtc('Atribut'))->with('success', 'Hapus data berhasil');
     }
 }

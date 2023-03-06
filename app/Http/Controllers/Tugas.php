@@ -22,7 +22,7 @@ class Tugas extends Controller
 
     public function index(Request $request)
     {
-        $title = 'Tugas';
+        $title = 'Kunjungan';
         $id_departemen = '';
         $id_pegawai = '';
         $tgl_awal = '';
@@ -52,7 +52,7 @@ class Tugas extends Controller
 
     public function store(Request $request)
     {
-        $title = 'Tugas';
+        $title = 'Kunjungan';
         if ($request->isMethod('POST')) {
             $validatedData = $request->validate([
                 'id_users' => 'required',
@@ -86,7 +86,7 @@ class Tugas extends Controller
 
     public function update(Request $request)
     {
-        $title = 'Tugas';
+        $title = 'Kunjungan';
         $rapat = TugasModel::findOrFail($request->id);
         $validatedData = $request->validate([
             'id_users' => 'required',
@@ -113,7 +113,7 @@ class Tugas extends Controller
 
     public function delete($id)
     {
-        $title = 'Tugas';
+        $title = 'Kunjungan';
         TugasModel::findOrFail($id)->delete();
         return redirect($this->button->formEtc($title))->with('success', 'Hapus data berhasil');
     }
@@ -124,7 +124,7 @@ class Tugas extends Controller
         $user = UserModel::all();
         $departemen = DepartemenModel::all();
         $button = $this->button;
-        $title = 'Tugas';
+        $title = 'Kunjungan';
         $cont = $this;
         return view('tugas.detail', compact('data', 'user', 'departemen', 'title', 'button', 'cont'));
     }
@@ -147,7 +147,7 @@ class Tugas extends Controller
             'foto' => $imagename,
             'updated_by' => auth()->user()->username,
         ]);
-        return redirect($this->button->formEtc('Tugas') . '/detail/' . $request->id)->with('success', 'Edit foto berhasil');
+        return redirect($this->button->formEtc('Kunjungan') . '/detail/' . $request->id)->with('success', 'Edit foto berhasil');
     }
 
     public function update_catatan(Request $request)
@@ -157,7 +157,7 @@ class Tugas extends Controller
             'catatan' => $request->catatan,
             'updated_by' => auth()->user()->email,
         ]);
-        return redirect($this->button->formEtc('Tugas') . '/detail/' . $request->id)->with('success', 'Edit catatan berhasil');
+        return redirect($this->button->formEtc('Kunjungan') . '/detail/' . $request->id)->with('success', 'Edit catatan berhasil');
     }
 
     public function getdata(Request $request)

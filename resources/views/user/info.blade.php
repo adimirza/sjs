@@ -125,7 +125,7 @@
 
                 <!-- Profile Edit Form -->
                 <!-- Profile Edit Form -->
-                <form action="{{ url($button->formEdit('Pegawai')) }}" method="POST">
+                <form action="{{ url($button->formEdit('Pegawai') ? $button->formEdit('Pegawai') : $button->formEdit('Profil Pegawai')) }}" method="POST">
                   @csrf
                   <div class="row mb-3">
                     <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Foto Profil</label>

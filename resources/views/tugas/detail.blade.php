@@ -236,7 +236,7 @@
 
   function getuser(iddepartemen, iduser) {
     $.ajax({
-      url: "{{ url($button->formEtc('Tugas').'/getdata') }}",
+      url: "{{ url($button->formEtc('Kunjungan').'/getdata') }}",
       data: {
         "id": iddepartemen,
       },
