@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
    
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Http\Controllers\Controller;
 use App\Models\UserModel;
 use App\User;
 use Illuminate\Support\Facades\Auth;
@@ -47,10 +48,10 @@ class AuthController extends BaseController
     {
         if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){ 
             $user = Auth::user(); 
-            $success['token'] =  $user->createToken('MyApp')-> accessToken; 
+            $success['token'] =  $user->createToken('MyApp')->accessToken; 
             $success['name'] =  $user->name;
-   
-            return $this->sendResponse($success, 'User login successfully.');
+            return response()->json($success);
+            // return $this->sendResponse($success, 'User login successfully.');
         } 
         else{ 
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);

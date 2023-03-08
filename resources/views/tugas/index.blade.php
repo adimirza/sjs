@@ -11,7 +11,7 @@
     <!-- /.card-header -->
     <div class="card-body">
       @if(auth()->user()->jabatan->role->nama != 'Member')
-      <form action="{{ url('tugas') }}" method="GET">
+      <form action="{{ url('kunjungan') }}" method="GET">
         <div class="row">
           <div class="col-3">
             <select name="id_departemen" id="id_departemen" class="form-select" aria-label="Default select example">
