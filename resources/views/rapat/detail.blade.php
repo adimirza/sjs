@@ -219,6 +219,7 @@
                           <th scope="col">Jabatan / Divisi</th>
                           <th scope="col">Hadir</th>
                           <th scope="col">Keterangan</th>
+                          <th scope="col">Aksi</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -230,8 +231,13 @@
                           <td>{{ $i++ }}</td>
                           <td>{{ $log->user->name }}</td>
                           <td>{{ $log->user->jabatan->nama.' - '.$log->user->departemen->nama }}</td>
-                          <td>{!! $log['konfirmasi'] ? '<span class="badge bg-success">Hadir</span>' : '<span class="badge bg-danger">Tidak Hadir</span>' !!}</td>
-                          <td>{{ $log['keterangan'] }}</td>
+                          <td>{!! $log->konfirmasi ? '<span class="badge bg-success">Hadir</span>' : '<span class="badge bg-danger">Tidak Hadir</span>' !!}</td>
+                          <td>{{ $log->keterangan }}</td>
+                          <td>
+                            @if($log->konfirmasi)
+                              <a href="{{ url($button->formEtc($title).'/tolak_kehadiran/'.$log->id) }}" class="btn btn-danger btn-sm" title="Tolak Kehadiran"><i class="bi bi-x-lg"></i></a>
+                            @endif
+                          </td>
                         </tr>
                         @endforeach
                       </tbody>

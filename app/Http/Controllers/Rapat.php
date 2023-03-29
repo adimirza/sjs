@@ -174,4 +174,16 @@ class Rapat extends Controller
         }
         return redirect($this->button->formEtc('Rapat'));
     }
+
+    public function tolak_kehadiran($id)
+    {
+        $rapat = LogRapatModel::findOrFail($id);
+        $data = [
+            'konfirmasi' => 0,
+            'keterangan' => 'Ditolak oleh admin.',
+            'updated_by' => auth()->user()->username,
+        ];
+        $rapat->update($data);
+        return redirect($this->button->formEtc('Rapat') . '/detail/' . $rapat->id_rapat);
+    }
 }

@@ -124,6 +124,7 @@ Route::post('/rapat/edit_foto', [Rapat::class, 'update_foto'])->middleware(['aut
 Route::post('/rapat/konfirmasi', [Rapat::class, 'konfirmasi'])->middleware(['auth', 'permission:rapat,update']);
 Route::delete('/rapat/delete/{id}', [Rapat::class, 'delete'])->middleware(['auth', 'permission:rapat,delete']);
 Route::get('/rapat/detail/{id}', [Rapat::class, 'detail'])->middleware(['auth', 'permission:rapat,read']);
+Route::get('/rapat/tolak_kehadiran/{id}', [Rapat::class, 'tolak_kehadiran'])->middleware(['auth', 'permission:rapat,update']);
 
 Route::get('/kunjungan', [Tugas::class, 'index'])->middleware(['auth', 'permission:kunjungan,read']);
 Route::match(['get', 'post'],'/kunjungan/add', [Tugas::class, 'store'])->middleware(['auth', 'permission:kunjungan,create']);
