@@ -133,7 +133,11 @@
                       <img src="{{ url('upload/image/profil') }}{{$data->foto ? '/'.$data->foto : '/person-icon.png'}}" alt="Profile">
                       <div class="pt-2">
                         <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image" data-bs-toggle="modal" data-bs-target="#upload_foto"><i class="bi bi-upload"></i></a>
+                        @if(auth()->user()->id_jabatan == 4)
+                        <a href="{{ url($button->formEtc('Profil Pegawai')).'/hapus_foto/' }}" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                        @else
                         <a href="{{ url($button->formEtc('Pegawai')).'/hapus_foto/'.$data->id }}" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                        @endif
                       </div>
                     </div>
                   </div>

@@ -26,8 +26,9 @@ class RolePermission extends Controller
         $role = RoleModel::find($id);
         $menu = MenuModel::all();
         $button = $this->button;
+        $cont = $this;
         $menu_permission = MenuPermissionModel::all();
-        return view('role_permission.index', compact('title', 'menu', 'role', 'menu_permission', 'button'));
+        return view('role_permission.index', compact('title', 'menu', 'role', 'menu_permission', 'button', 'cont'));
     }
 
     public function store(Request $request)

@@ -270,13 +270,19 @@ class User extends Controller
         return redirect($this->button->formEtc('Pegawai') . '/info/' . $request->id)->with('success', 'Edit data berhasil');
     }
 
-    public function hapus_foto($id)
+    public function hapus_foto($id = null)
     {
+        if(auth()->user()->id_jabatan == 4){
+            $id = auth()->user()->id;
+        }
         $user = ModelsUser::findOrFail($id);
         $user->update([
             'foto' => '',
             'updated_by' => auth()->user()->email,
         ]);
+        if(auth()->user()->id_jabatan == 4){
+            return redirect($this->button->formEtc('Profil Pegawai'))->with('success', 'Edit data berhasil');
+        }
         return redirect($this->button->formEtc('Pegawai') . '/info/' . $id)->with('success', 'Edit data berhasil');
     }
 

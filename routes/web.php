@@ -44,6 +44,7 @@ Route::get('/api_example', [Api_example::class, 'index']);
 Route::get('/profil_pegawai', [User::class, 'profil'])->middleware(['auth', 'permission:profil pegawai,read']);
 Route::post('/profil_pegawai/edit', [User::class, 'update'])->middleware(['auth', 'permission:profil pegawai,update']);
 Route::post('/profil_pegawai/ganti_foto', [User::class, 'ganti_foto'])->middleware(['auth', 'permission:profil pegawai,update']);
+Route::get('/profil_pegawai/hapus_foto', [User::class, 'hapus_foto'])->middleware(['auth', 'permission:profil pegawai,update']);
 Route::post('/profil_pegawai/reset', [User::class, 'reset'])->middleware(['auth', 'permission:profil pegawai,update']);
 Route::get('/kelengkapan_pegawai', [Kelengkapan::class, 'index_staf'])->middleware(['auth', 'permission:kelengkapan pegawai,read']);
 Route::post('/kelengkapan_pegawai/edit', [Kelengkapan::class, 'update'])->middleware(['auth', 'permission:kelengkapan pegawai,update']);
@@ -139,8 +140,9 @@ Route::delete('/soal/delete/{id}/{id_surat}', [Soal::class, 'delete'])->middlewa
 Route::get('/soal/getsoal', [Soal::class, 'getSoal'])->middleware(['auth', 'permission:soal,read']);
 
 Route::get('/teguran/{id}', [Teguran::class, 'index'])->middleware(['auth', 'permission:teguran,read']);
-Route::post('/teguran/add/{id_users}', [Teguran::class, 'store'])->middleware(['auth', 'permission:teguran,create']);
-Route::post('/teguran/edit/{id_users}', [Teguran::class, 'update'])->middleware(['auth', 'permission:teguran,update']);
+Route::get('/teguran', [Teguran::class, 'index'])->middleware(['auth', 'permission:teguran dan peringatan,read']);
+Route::match(['get', 'post'],'/teguran/add/{id_users}', [Teguran::class, 'store'])->middleware(['auth', 'permission:teguran,create']);
+Route::match(['get', 'post'],'/teguran/edit/{id_users}', [Teguran::class, 'update'])->middleware(['auth', 'permission:teguran,update']);
 Route::delete('/teguran/delete/{id}/{id_users}', [Teguran::class, 'delete'])->middleware(['auth', 'permission:teguran,delete']);
 
 Route::get('/kelengkapan/{id}', [Kelengkapan::class, 'index'])->middleware(['auth', 'permission:kelengkapan,read']);

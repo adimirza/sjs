@@ -47,7 +47,7 @@ class KotakMasuk extends Controller
     {
         $result = [
             'jawaban' => '',
-            'is_benar' => 0 
+            'is_benar' => 2 
         ];
         $jawaban = JawabanSoalModel::where(['id_users' => auth()->user()->id, 'id_soal' => $id_soal])->first();
         if($jawaban){

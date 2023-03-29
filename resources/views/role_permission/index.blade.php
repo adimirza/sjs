@@ -23,7 +23,7 @@
               @foreach($menu_permission as $per)
               @if(($per['id_menu'] == $mn['id']) AND $per['is_active'])
               <?php 
-              $role_per = App\Http\Controllers\RolePermission::getPermission($role['id'], $per['id']);
+              $role_per = $cont->getPermission($role['id'], $per['id']);
               ?>
               <div class="custom-control custom-checkbox">
                 <input class="custom-control-input" type="checkbox" id="{{ $per['id'] }}" name="id_permission[]" value="{{ $per['id'] }}" {{ $role_per ? 'checked' : '' }}>

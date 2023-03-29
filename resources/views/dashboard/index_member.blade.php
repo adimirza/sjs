@@ -28,7 +28,7 @@
             <div class="progress-bar" role="progressbar" style="width: {{ $jml_umum ? ($jml_paham_umum/$jml_umum)*100 : '0' }}%" aria-valuenow="{{ $jml_paham_umum }}" aria-valuemin="0" aria-valuemax="100">SE Umum {{ $jml_paham_umum }}/{{ $jml_umum }}</div>
           </div>
           <div class="progress mt-3">
-            <div class="progress-bar" role="progressbar" style="width: {{ $jml_umum ? ($jml_paham_divisi/$jml_divisi)*100 : 0 }}%" aria-valuenow="{{ $jml_paham_divisi }}" aria-valuemin="0" aria-valuemax="100">SE Divisi {{ $jml_paham_divisi }}/{{ $jml_divisi }}</div>
+            <div class="progress-bar" role="progressbar" style="width: {{ $jml_divisi ? ($jml_paham_divisi/$jml_divisi)*100 : 0 }}%" aria-valuenow="{{ $jml_paham_divisi }}" aria-valuemin="0" aria-valuemax="100">SE Divisi {{ $jml_paham_divisi }}/{{ $jml_divisi }}</div>
           </div>
         </div>
       </div>

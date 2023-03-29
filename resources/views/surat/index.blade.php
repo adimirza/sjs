@@ -28,7 +28,7 @@
           @foreach($data as $dt)
           <tr>
             <td>{{ $i++ }}</td>
-            <td>{{ $dt->topik->nama }}</td>
+            <td>{{ $dt->topik->nama ? $dt->topik->nama : '' }}</td>
             <td>{{ $dt['keterangan_topik'] }}</td>
             <td>{{ $dt['nomor_surat'] }}</td>
             <td>{!! $dt->expired($dt['tanggal_berakhir']) !!}</td>
@@ -36,7 +36,7 @@
 
               <form action="{{ url($button->formDelete($title), ['id' => $dt->id]) }}" method="POST">
                 <a href="{{ url($button->formEtc($title).'/detail/'.$dt->id) }}" class="btn btn-info btn-sm"><i class="bi bi-info-circle"></i></a>
-                <a href="{{ url($button->formEtc($title).'/info/'.$dt->id) }}" class="btn btn-secondary btn-sm"><i class="bi bi-collection"></i></a>
+                <!-- <a href="{{ url($button->formEtc($title).'/info/'.$dt->id) }}" class="btn btn-secondary btn-sm"><i class="bi bi-collection"></i></a> -->
 
                 @csrf
                 @method('DELETE')

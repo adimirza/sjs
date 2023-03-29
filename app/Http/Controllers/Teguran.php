@@ -18,8 +18,11 @@ class Teguran extends Controller
         $this->button = new GetButton;
     }
 
-    public function index($id)
+    public function index($id = null)
     {
+        if(auth()->user()->id_jabatan == 4){
+            $id = auth()->user()->id;
+        }
         $title = 'Teguran';
         $data = TeguranModel::where('id_users', $id)->orderBy('tanggal')->get();
         $user = UserModel::find($id);

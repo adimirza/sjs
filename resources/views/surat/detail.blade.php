@@ -470,7 +470,7 @@
         <div class="modal-body">
           <div class="col-sm-12">
             <input type="hidden" name="id_surat" value="{{ $data->id }}">
-            <textarea class="form-control" name="pertanyaan" placeholder="Tulis pertanyaan" style="height: 100px"></textarea>
+            <textarea class="form-control" name="pertanyaan" placeholder="Tulis pertanyaan" style="height: 100px" required></textarea>
           </div>
           <h5 class="card-title">Jawaban</h5>
           <div class="row mb-3">
@@ -500,7 +500,7 @@
           <div class="row mb-12">
             <label class="col-sm-3 col-form-label">Jawaban Benar</label>
             <div class="col-sm-4">
-              <select class="form-select" name="kunci_jawaban" aria-label="Default select example">
+              <select class="form-select" name="kunci_jawaban" aria-label="Default select example" required>
                 <option selected="">Pilih Jawaban</option>
                 <option value="A">A</option>
                 <option value="B">B</option>
@@ -531,7 +531,7 @@
           <div class="col-sm-12">
             <input type="hidden" name="id_surat" value="{{ $data->id }}">
             <input type="hidden" name="id" id="soal-id" value="">
-            <textarea class="form-control" id="soal-pertanyaan" name="pertanyaan" placeholder="Tulis pertanyaan" style="height: 100px"></textarea>
+            <textarea class="form-control" id="soal-pertanyaan" name="pertanyaan" placeholder="Tulis pertanyaan" style="height: 100px" required></textarea>
           </div>
           <h5 class="card-title">Jawaban</h5>
           <div class="row mb-3">
@@ -561,7 +561,7 @@
           <div class="row mb-12">
             <label class="col-sm-3 col-form-label">Jawaban Benar</label>
             <div class="col-sm-4">
-              <select class="form-select" name="kunci_jawaban" id="soal-kunci_jawaban" aria-label="Default select example">
+              <select class="form-select" name="kunci_jawaban" id="soal-kunci_jawaban" aria-label="Default select example" required>
                 <option selected="">Pilih Jawaban</option>
                 <option value="A">A</option>
                 <option value="B">B</option>
