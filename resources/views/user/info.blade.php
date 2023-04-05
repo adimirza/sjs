@@ -349,12 +349,11 @@
                 <!-- Change Password Form -->
                 <form method="POST" action="{{ url($uri.'/reset') }}">
                   @csrf
+                  @if(auth()->user()->id_jabatan != '1')
                   <div class="row mb-3">
                     <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Password Kini</label>
                     <div class="col-md-8 col-lg-9">
                       <input name="old_password" type="password" class="form-control @error('old_password') is-invalid @enderror">
-                      <input name="id" type="hidden" value="{{ $data->id }}">
-                      <input name="uri" type="hidden" value="{{ $uri }}">
                       @error('old_password')
                       <div class="invalid-feedback">
                         {{ $message }}
@@ -362,7 +361,9 @@
                       @enderror
                     </div>
                   </div>
-
+                  @endif
+                  <input name="id" type="hidden" value="{{ $data->id }}">
+                  <input name="uri" type="hidden" value="{{ $uri }}">
                   <div class="row mb-3">
                     <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">Password Baru</label>
                     <div class="col-md-8 col-lg-9">

@@ -51,7 +51,7 @@ class Soal extends Controller
                 'updated_by' => auth()->user()->email,
             ];
             SoalModel::create($data);
-            return redirect($this->button->formEtc($title) . '/detail/' . $request->id_surat)->with('success', 'Input data berhasil');
+            return redirect($this->button->formEtc($title) . '/detail/' . $request->id_surat.'?tab=soal')->with('success', 'Input data berhasil');
         }
     }
 
@@ -102,7 +102,7 @@ class Soal extends Controller
                 'kunci_jawaban' => $request->kunci_jawaban,
                 'updated_by' => auth()->user()->email,
             ]);
-            return redirect($this->button->formEtc($title) . '/detail/' . $request->id_surat)->with('success', 'Edit data berhasil');
+            return redirect($this->button->formEtc($title) . '/detail/' . $request->id_surat.'?tab=soal')->with('success', 'Edit data berhasil');
         }
     }
 
@@ -116,6 +116,6 @@ class Soal extends Controller
             $title = 'Surat Edaran Khusus';
         }
         $soal->delete();
-        return redirect($this->button->formEtc($title) . '/detail/' . $surat->id)->with('success', 'Hapus data berhasil');
+        return redirect($this->button->formEtc($title) . '/detail/' . $surat->id.'?tab=soal')->with('success', 'Hapus data berhasil');
     }
 }

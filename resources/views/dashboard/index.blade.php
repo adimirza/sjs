@@ -69,10 +69,10 @@
               </div>
               <div class="mt-4 text-center small d-flex justify-content-center flex-wrap">
                 <span class="me-3">
-                  <i class="bi bi-circle-fill text-primary"></i> Paham SE ({{ $jml_paham }})
+                  <i class="bi bi-circle-fill text-primary"></i> Paham SE ({{ $jml_umum + $jml_khusus > 0 ? $jml_paham : 0 }})
                 </span>
                 <span class="me-3">
-                  <i class="bi bi-circle-fill text-danger"></i> Belum Paham SE ({{ $jml_staff-$jml_paham }})
+                  <i class="bi bi-circle-fill text-danger"></i> Belum Paham SE ({{ $jml_umum + $jml_khusus > 0 ? $jml_staff-$jml_paham : 0 }})
                 </span>
                 <span class="me-3">
                   <i class="bi bi-circle-fill text-info"></i> Total Staff ({{ $jml_staff }})
@@ -190,7 +190,7 @@
   var data = {
     labels: ["Paham SE", "Belum Paham SE"],
     datasets: [{
-      data: [{{ $jml_paham }}, {{ ($jml_staff) - $jml_paham }}],
+      data: [{{ $jml_umum + $jml_khusus > 0 ? $jml_paham : 0 }}, {{ $jml_umum + $jml_khusus > 0 ? ($jml_staff) - $jml_paham : 0 }}],
       backgroundColor: ["#007bff", "#dc3545"],
     }, ],
   };

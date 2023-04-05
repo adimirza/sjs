@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\UserImport;
 use App\Lib\GetButton;
 use App\Models\DepartemenModel;
 use App\Models\HistoryNilaiModel;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 class User extends Controller
 {
@@ -34,16 +36,16 @@ class User extends Controller
         //                     ->leftJoin('jabatan', 'users.id_jabatan', '=', 'jabatan.id')
         //                     ->leftJoin('bs_role', 'jabatan.id_role', '=', 'bs_role.id')
         //                     ->get();
-        if(auth()->user()->id_jabatan == '3'){
+        if (auth()->user()->id_jabatan == '3') {
             $id_departemen = auth()->user()->id_departemen;
-        }elseif($request->id_departemen){
+        } elseif ($request->id_departemen) {
             $id_departemen = $request->id_departemen;
-        }else{
+        } else {
             $id_departemen = '';
         }
-        if($id_departemen == 99){
+        if ($id_departemen == 99) {
             $data = ModelsUser::all();
-        }else{
+        } else {
             $data = ModelsUser::where('id_departemen', $id_departemen)->get();
         }
         $departemen = DepartemenModel::all();
@@ -60,22 +62,35 @@ class User extends Controller
         $jabatan = JabatanModel::all();
         $button = $this->button;
         $jml_paham_umum = HistoryNilaiModel::select("id_users")
-                                ->join("surat", "history_nilai.id_surat", "=", "surat.id")
-                                ->where(["nilai" => "nilai_max", 
-                                         "id_users" => $data->id,
-                                         "ditujukan" => 0])
-                                ->distinct()->count();
+            ->join("surat", "history_nilai.id_surat", "=", "surat.id")
+            ->where([
+                "nilai" => "nilai_max",
+                "id_users" => $data->id,
+                "ditujukan" => 0
+            ])
+            ->distinct()->count();
         $jml_paham_divisi = HistoryNilaiModel::select("id_users")
-                            ->join("surat", "history_nilai.id_surat", "=", "surat.id")
-                            ->whereRaw("nilai = nilai_max AND ".
-                                        "id_users = ".$data->id." AND ".
-                                        "ditujukan = ".$data->id_departemen)
-                            ->distinct()->count();
+            ->join("surat", "history_nilai.id_surat", "=", "surat.id")
+            ->whereRaw("nilai = nilai_max AND " .
+                "id_users = " . $data->id . " AND " .
+                "ditujukan = " . $data->id_departemen)
+            ->distinct()->count();
         $jml_umum = SuratModel::where("ditujukan", 0)->count();
         $jml_divisi = SuratModel::where("ditujukan", $data->id_departemen)->count();
         $log = LogSuratModel::where("id_users", $data->id)->get();
-        return view('user.info', compact('data', 'title', 'button', 'departemen', 'jabatan', 'jml_paham_umum',
-                                         'jml_paham_divisi', 'jml_umum', 'jml_divisi', 'log', 'uri'));
+        return view('user.info', compact(
+            'data',
+            'title',
+            'button',
+            'departemen',
+            'jabatan',
+            'jml_paham_umum',
+            'jml_paham_divisi',
+            'jml_umum',
+            'jml_divisi',
+            'log',
+            'uri'
+        ));
     }
 
     public function profil()
@@ -87,22 +102,35 @@ class User extends Controller
         $jabatan = JabatanModel::all();
         $button = $this->button;
         $jml_paham_umum = HistoryNilaiModel::select("id_users")
-                                ->join("surat", "history_nilai.id_surat", "=", "surat.id")
-                                ->where(["nilai" => "nilai_max", 
-                                         "id_users" => $data->id,
-                                         "ditujukan" => 0])
-                                ->distinct()->count();
+            ->join("surat", "history_nilai.id_surat", "=", "surat.id")
+            ->where([
+                "nilai" => "nilai_max",
+                "id_users" => $data->id,
+                "ditujukan" => 0
+            ])
+            ->distinct()->count();
         $jml_paham_divisi = HistoryNilaiModel::select("id_users")
-                            ->join("surat", "history_nilai.id_surat", "=", "surat.id")
-                            ->whereRaw("nilai = nilai_max AND ".
-                                        "id_users = ".$data->id." AND ".
-                                        "ditujukan = ".$data->id_departemen)
-                            ->distinct()->count();
+            ->join("surat", "history_nilai.id_surat", "=", "surat.id")
+            ->whereRaw("nilai = nilai_max AND " .
+                "id_users = " . $data->id . " AND " .
+                "ditujukan = " . $data->id_departemen)
+            ->distinct()->count();
         $jml_umum = SuratModel::where("ditujukan", 0)->count();
         $jml_divisi = SuratModel::where("ditujukan", $data->id_departemen)->count();
         $log = LogSuratModel::where("id_users", $data->id)->get();
-        return view('user.info', compact('data', 'title', 'button', 'departemen', 'jabatan', 'jml_paham_umum',
-                                         'jml_paham_divisi', 'jml_umum', 'jml_divisi', 'log', 'uri'));
+        return view('user.info', compact(
+            'data',
+            'title',
+            'button',
+            'departemen',
+            'jabatan',
+            'jml_paham_umum',
+            'jml_paham_divisi',
+            'jml_umum',
+            'jml_divisi',
+            'log',
+            'uri'
+        ));
     }
 
     public function store(Request $request)
@@ -126,16 +154,16 @@ class User extends Controller
                 'status' => 'required',
             ]);
 
-            if($request->file('foto')){
+            if ($request->file('foto')) {
                 $image = $request->file('foto');
                 $imagename = $request->id . time() . '.' . $image->extension();
                 $destinationPath = public_path('upload/image/profil');
-    
+
                 $img = Image::make($image->path());
                 $img->resize(800, null, function ($constraint) {
                     $constraint->aspectRatio();
                 })->save($destinationPath . '/' . $imagename);
-            }else{
+            } else {
                 $imagename = 'default.png';
             }
 
@@ -213,7 +241,7 @@ class User extends Controller
                 'status' => $request->status,
                 'updated_by' => auth()->user()->email,
             ]);
-            if(auth()->user()->id_jabatan == 4){
+            if (auth()->user()->id_jabatan == 4) {
                 return redirect($this->button->formEtc('Profil Pegawai'))->with('success', 'Edit data berhasil');
             }
             return redirect($this->button->formEtc('Pegawai') . '/info/' . $request->id)->with('success', 'Edit data berhasil');
@@ -245,7 +273,7 @@ class User extends Controller
             'foto' => $imagename,
             'updated_by' => auth()->user()->email,
         ]);
-        if(auth()->user()->id_jabatan == 4){
+        if (auth()->user()->id_jabatan == 4) {
             return redirect($this->button->formEtc('Profil Pegawai'))->with('success', 'Edit data berhasil');
         }
         return redirect($this->button->formEtc('Pegawai') . '/info/' . $request->id)->with('success', 'Edit data berhasil');
@@ -260,7 +288,7 @@ class User extends Controller
         }
         $file = $request->file('file_surat');
         $extension = $file->getClientOriginalExtension();
-        $rename = $request->id.'_'.date('YmdHis') . $extension;
+        $rename = $request->id . '_' . date('YmdHis') . $extension;
 
         $surat = ModelsUser::findOrFail($request->id);
         $surat->update([
@@ -272,7 +300,7 @@ class User extends Controller
 
     public function hapus_foto($id = null)
     {
-        if(auth()->user()->id_jabatan == 4){
+        if (auth()->user()->id_jabatan == 4) {
             $id = auth()->user()->id;
         }
         $user = ModelsUser::findOrFail($id);
@@ -280,7 +308,7 @@ class User extends Controller
             'foto' => '',
             'updated_by' => auth()->user()->email,
         ]);
-        if(auth()->user()->id_jabatan == 4){
+        if (auth()->user()->id_jabatan == 4) {
             return redirect($this->button->formEtc('Profil Pegawai'))->with('success', 'Edit data berhasil');
         }
         return redirect($this->button->formEtc('Pegawai') . '/info/' . $id)->with('success', 'Edit data berhasil');
@@ -289,19 +317,22 @@ class User extends Controller
     public function reset(Request $request)
     {
         $validatedData = $request->validate([
-            'old_password' => 'required',
+            // 'old_password' => 'required',
             'password' => 'required|confirmed|min:6',
             'password_confirmation' => 'required|min:6',
         ]);
         $url = '/profil_pegawai';
-        if($request->uri == 'pegawai'){
+        if ($request->uri == 'pegawai') {
             $url = '/info/' . $request->id;
         }
 
         if ($validatedData) {
-            if (!Hash::check($request->old_password, auth()->user()->password)) {
-                return back()->with('error', "Current Password is Invalid");
+            if(auth()->user()->id_jabatan != '1'){
+                if (!Hash::check($request->old_password, auth()->user()->password)) {
+                    return back()->with('error', "Current Password is Invalid");
+                }
             }
+
             $user = ModelsUser::findOrFail($request->id);
             $user->update([
                 'password' => Hash::make($request->password),
@@ -316,5 +347,80 @@ class User extends Controller
     {
         ModelsUser::findOrFail($id)->delete();
         return redirect($this->button->formEtc('Pegawai'))->with('success', 'Hapus data berhasil');
+    }
+
+    // public function import_excel_(Request $request)
+    // {
+    //     // print_r('halo');
+    //     // die;
+    //     $this->validate($request, [
+    //         'file' => 'required|mimes:csv,xls,xlsx'
+    //     ]);
+
+    //     $file = $request->file('file');
+    //     $nama_file = rand() . $file->getClientOriginalName();
+    //     $file->move('upload/excel/file_user', $nama_file);
+    //     Excel::import(new UserImport, public_path('upload/excel/file_user/' . $nama_file));
+
+    //     return redirect($this->button->formEtc('Pegawai'))->with('success', 'Import data berhasil');
+    // }
+
+    public function import_excel(Request $request)
+    {
+        ini_set('memory_limit', '-1');
+        try {
+            if ($request->file('file')) {
+                $file_excel = $request->file('file');
+                $render = new Xlsx();
+                $spreadsheet = $render->load($file_excel);
+
+                $data = $spreadsheet->getActiveSheet()->toArray();
+                foreach ($data as $x => $row) {
+                    if ($x == 0) {
+                        continue;
+                    }
+
+                    $jab = 0;
+                    $dep = 0;
+                    $getJab = JabatanModel::where('nama', $row[2])->first();
+                    $getDep = DepartemenModel::where('nama', $row[3])->first();
+                    if ($getJab) {
+                        $jab = $getJab->id;
+                    }
+                    if ($getDep) {
+                        $dep = $getDep->id;
+                    }
+                    $cek = ModelsUser::whereRaw("id_pegawai = '".$row[0]."' OR username = '".$row[5]."'")->first();
+                    if(!$cek AND !empty($row[0])){
+                        ModelsUser::create([
+                            'id_pegawai' => $row[0],
+                            'name' => $row[1],
+                            'id_jabatan' => $jab,
+                            'id_departemen' => $dep,
+                            'email' => $row[4],
+                            'username' => $row[5],
+                            'password' => md5('123456'),
+                            'jenis_kelamin' => 1,
+                            'tempat_lahir' => '',
+                            'tanggal_lahir' => '1970-01-01',
+                            'no_hp' => '',
+                            'alamat' => '',
+                            'no_bpjs' => '',
+                            'tanggal_masuk' => '1970-01-01',
+                            'tanggal_berakhir' => '1970-01-01',
+                            'foto' => '',
+                            'status' => 1,
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' => date('Y-m-d H:i:s'),
+                        ]);
+                    }
+                }
+            } else {
+                return redirect($this->button->formEtc('Pegawai'))->with('error', 'File tidak ditemukan.');
+            }
+        } catch (\Exception $e) {
+            return redirect($this->button->formEtc('Pegawai'))->with('error', $e);
+        }
+        return redirect($this->button->formEtc('Pegawai'))->with('success', 'Berhasil import excel.');
     }
 }

@@ -25,11 +25,6 @@ class Login extends Controller
 
     public function proses_login(Request $request)
     {
-        // $code = $request->CaptchaCode;
-        // // $isHuman = captcha_validate($code);
-        // $isHuman = Captcha::check();
-        // print_r($isHuman);
-        // die;
         Validator::make($request->all(), [
             'username' => 'required',
             'password' => 'required',
@@ -38,12 +33,38 @@ class Login extends Controller
             // 'g-recaptcha-response' => 'recaptcha',
         ])->validate();
 
+        $cek = UserModel::where('username', $request->username)->first();
+        if($cek['password'] == md5($request->password)){
+            $username = $cek['username'];
+            return view('login.reset', compact('username'));
+        }
+        
         if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
             $request->session()->regenerate();
             return redirect()->intended('/');
         }
 
         return back()->with('loginError', 'Login Failed!');
+    }
+
+    public function reset(Request $request)
+    {
+        // if ($request->isMethod('POST')) {
+            $validatedData = $request->validate([
+                'password' => 'required|confirmed|min:6',
+                'password_confirmation' => 'required|min:6',
+            ]);
+
+            if ($validatedData) {
+                $user = UserModel::where('username', $request->username)->first();
+                $user->update([
+                    'password' => Hash::make($request->password),
+                    'updated_by' => $request->username,
+                ]);
+                return redirect('login')->with('success', 'Reset password berhasil');
+            }
+            return redirect('login')->with('loginError', 'Reset password gagal.');
+        // }
     }
 
     // public function reloadCaptcha()

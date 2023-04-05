@@ -15,6 +15,7 @@
             <i class="bi bi-search"></i>
           </a>
         </li>
+        @if(auth()->user()->jabatan->id_role != '1')
         <li class="nav-item dropdown">
 
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
@@ -59,6 +60,7 @@
             </li>
           </ul>
         </li>
+        @endif
         <li class="nav-item dropdown pe-3">
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <img src="{{ url('upload/image/profil') }}{{auth()->user()->foto ? '/'.auth()->user()->foto : '/person-icon.png'}}" alt="Profile" class="rounded-circle">

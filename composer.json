@@ -14,7 +14,8 @@
         "laravel/passport": "*",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "nesbot/carbon": "^2.64"
+        "nesbot/carbon": "^2.64",
+        "phpoffice/phpspreadsheet": "^1.28"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

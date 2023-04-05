@@ -42,15 +42,18 @@ class Dashboard extends Controller
         if(auth()->user()->id_jabatan == '4'){
             $data['jml_paham_umum'] = HistoryNilaiModel::select("id_users")
                                 ->join("surat", "history_nilai.id_surat", "=", "surat.id")
-                                ->where(["nilai" => "nilai_max", 
-                                         "id_users" => auth()->user()->id,
-                                         "ditujukan" => 0])
+                                ->whereRaw("nilai = nilai_max AND 
+                                            id_users =". auth()->user()->id.
+                                            " AND ditujukan = 0 AND YEAR(tanggal) = ".$data['tahun'].
+                                            " AND MONTH(tanggal) = ".$data['bulan'])
                                 ->distinct()->count();
             $data['jml_paham_divisi'] = HistoryNilaiModel::select("id_users")
                                 ->join("surat", "history_nilai.id_surat", "=", "surat.id")
                                 ->whereRaw("nilai = nilai_max AND ".
                                             "id_users = ".auth()->user()->id." AND ".
-                                            "ditujukan = ".auth()->user()->id_departemen)
+                                            "ditujukan = ".auth()->user()->id_departemen.
+                                            " AND ditujukan = 0 AND YEAR(tanggal) = ".$data['tahun'].
+                                            " AND MONTH(tanggal) = ".$data['bulan'])
                                 ->distinct()->count();
             $data['jml_umum'] = SuratModel::where("ditujukan", 0)->count();
             $data['jml_divisi'] = SuratModel::where("ditujukan", auth()->user()->id_departemen)->count();
@@ -70,8 +73,10 @@ class Dashboard extends Controller
                                                    "id_departemen" => auth()->user()->id_departemen])->count();
             $data['jml_paham'] = HistoryNilaiModel::select("id_users")
                                                     ->join("users", "history_nilai.id_users", "=", "users.id")
+                                                    ->join("surat", "history_nilai.id_surat", "=", "surat.id")
                                                     ->whereRaw("nilai = nilai_max AND id_departemen = ".
-                                                        auth()->user()->id_departemen)
+                                                        auth()->user()->id_departemen." AND YEAR(surat.tanggal) = ".$data['tahun'].
+                                                        " AND MONTH(surat.tanggal) = ".$data['bulan'])
                                                     ->distinct()->count();
             $data['departemen'] = DepartemenModel::all();
             $data['tugas'] = TugasModel::selectRaw("DISTINCT(DATE_FORMAT(tanggal, '%Y-%m-%d')) as tanggal")
@@ -87,7 +92,12 @@ class Dashboard extends Controller
             $data['jml_khusus'] = SuratModel::whereRaw("ditujukan != 0 AND YEAR(tanggal) = ".$data['tahun'].
                                             " AND MONTH(tanggal) = ".$data['bulan'])->count();
             $data['jml_staff'] = UserModel::where("id_jabatan", 4)->count();
-            $data['jml_paham'] = HistoryNilaiModel::select("id_users")->whereRaw("nilai = nilai_max")->distinct()->count();
+            $data['jml_paham'] = HistoryNilaiModel::select("id_users")
+                                                    ->join("surat", "history_nilai.id_surat", "=", "surat.id")
+                                                    ->whereRaw("nilai = nilai_max AND 
+                                                                YEAR(surat.tanggal) = ".$data['tahun'].
+                                                    " AND MONTH(surat.tanggal) = ".$data['bulan'])
+                                                    ->distinct()->count();
             $data['departemen'] = DepartemenModel::all();
             $data['tugas'] = TugasModel::selectRaw("DISTINCT(DATE_FORMAT(tanggal, '%Y-%m-%d')) as tanggal")
                                         ->whereRaw("MONTH(tanggal) = ".$data['bulan'].

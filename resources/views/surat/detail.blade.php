@@ -121,7 +121,7 @@
             <!-- Bordered Tabs -->
             <ul class="nav nav-tabs nav-tabs-bordered">
               <li class="nav-item">
-                <button class="nav-link {{ count($soal) > 0 ? 'active' : '' }}" data-bs-toggle="tab" data-bs-target="#overview">Detail</button>
+                <button class="nav-link {{ $tab == '' ? 'active' : '' }}" data-bs-toggle="tab" data-bs-target="#overview">Detail</button>
               </li>
               <li class="nav-item">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#preview">Preview Surat</button>
@@ -130,14 +130,14 @@
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#edit">Sunting</button>
               </li>
               <li class="nav-item">
-                <button class="nav-link {{ count($soal) <= 0 ? 'active' : '' }}" data-bs-toggle="tab" data-bs-target="#soal">Soal</button>
+                <button class="nav-link {{ $tab == 'soal' ? 'active' : '' }}" data-bs-toggle="tab" data-bs-target="#soal">Soal</button>
               </li>
               <li class="nav-item">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#log">Log Pengerjaan</button>
               </li>
             </ul>
             <div class="tab-content pt-2">
-              <div class="tab-pane fade {{ count($soal) > 0 ? 'show active' : '' }} profile-overview" id="overview">
+              <div class="tab-pane fade {{ $tab == '' ? 'show active' : '' }} profile-overview" id="overview">
                 <h5 class="card-title">Detail Surat Edaran</h5>
                 <div class="row">
                   <div class="col-lg-3 col-md-4 label ">Nomor Surat</div>
@@ -319,7 +319,7 @@
                   </div>
                 </form><!-- End Profile Edit Form -->
               </div>
-              <div class="tab-pane {{ count($soal) <= 0 ? 'show active' : '' }} fade pt-3" id="soal">
+              <div class="tab-pane {{ $tab == 'soal' ? 'show active' : '' }} fade pt-3" id="soal">
                 <div class="card">
                   <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambah_soal">Tambah Pertanyaan</a>
                   @php

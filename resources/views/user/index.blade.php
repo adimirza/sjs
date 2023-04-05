@@ -12,7 +12,6 @@
     <div class="card-body">
       <form action="{{ url($button->formEtc('Pegawai')) }}" method="GET" class="d-inline">
         <div class="row">
-
           <div class="col-4">
             <select class="form-select" id="fil-idDepartement/Divisi" name="id_departemen" aria-label="Default select example" required="">
               <option value="">Pilih Departement/Divisi</option>
@@ -25,14 +24,13 @@
           <div class="col-1">
             <button type="submit" class="btn btn-primary">Pilih</button>
           </div>
-
-          <!-- <div class="col-3">
-          <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#import">Import Anggota</button>
-        </div> -->
+          <div class="col-3">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#import">Import Pegawai</button>
+          </div>
         </div>
       </form>
       <br>
-      <table class="table table-borderless datatable">
+      <table class="table table-borderless" id="data_user">
         <thead>
           <tr>
             <th scope="col">No</th>
@@ -77,8 +75,30 @@
     </div>
   </div>
 </section>
+<div class="modal fade" id="import" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Import Pegawai</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="POST" action="{{ url($button->formEtc('Pegawai').'/import_excel') }}" enctype="multipart/form-data">
+      <div class="modal-body">
+        @csrf
+        <input type="file" name="file" class="form-control">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <button type="submit" class="btn btn-primary">Import</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
 @endsection
 @section('footlib_req')
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
 <script src="{{ url('/assets/js/sweetalert.min.js') }}"></script>
 <script type="text/javascript">
   $('.show_confirm').click(function(event) {
@@ -97,6 +117,18 @@
           form.submit();
         }
       });
+  });
+
+  $(document).ready(function() {
+    $('#data_user').DataTable({
+      dom: 'Bfrtip',
+      buttons: [
+        'copyHtml5',
+        'excelHtml5',
+        'csvHtml5',
+        'pdfHtml5'
+      ]
+    });
   });
 </script>
 @endsection

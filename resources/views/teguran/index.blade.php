@@ -54,8 +54,9 @@
             </div>
           </div><!-- End Customers Card -->
         </div>
-          <!-- <a href="{{ url($button->formEtc('Teguran').'/add/'.$user->id) }}" class="btn btn-primary"><i class="bi bi-plus me-1"></i> Tambah</a> -->
-          {!! $button->btnCreate($title) !!}
+          @if($button->btnCreate($title))
+            <a href="{{ url($button->formEtc('Teguran').'/add/'.$user->id) }}" class="btn btn-primary">Tambah</a>
+          @endif
         <br>
         <br>
         <!-- Default Accordion -->

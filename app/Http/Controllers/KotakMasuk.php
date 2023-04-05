@@ -108,10 +108,10 @@ class KotakMasuk extends Controller
                 'status' => $status
             ]);
         }
-        return redirect($this->button->formEtc('Kotak Masuk') . '/detail/'.$soal['id_surat'])->with('success', 'Input data berhasil');
+        return redirect($this->button->formEtc('Kotak Masuk') . '/detail/'.$soal['id_surat'].'?tab=soal')->with('success', 'Input data berhasil');
     }
 
-    public function detail($id)
+    public function detail(Request $request, $id)
     {
         $cek = LogSuratModel::where(['id_surat' => $id, 'id_users' => auth()->user()->id, 'status' => '1'])->first();
         if (!$cek) {
@@ -121,6 +121,7 @@ class KotakMasuk extends Controller
                 'status' => '1'
             ]);
         }
+        $tab = $request->tab;
         $nilai = HistoryNilaiModel::where(['id_users' => auth()->user()->id, 'id_surat' => $id])->first();
         $data = SuratModel::find($id);
         $soal = SoalModel::where('id_surat', $id)->get()->shuffle();
@@ -128,6 +129,6 @@ class KotakMasuk extends Controller
         $button = $this->button;
         $cont = $this;
         $title = 'Kotak Masuk';
-        return view('kotak_masuk.detail', compact('data', 'soal', 'title', 'nilai', 'button', 'cont', 'history_nilai'));
+        return view('kotak_masuk.detail', compact('data', 'soal', 'title', 'nilai', 'button', 'cont', 'history_nilai', 'tab'));
     }
 }

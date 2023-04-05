@@ -20,7 +20,7 @@ class Teguran extends Controller
 
     public function index($id = null)
     {
-        if(auth()->user()->id_jabatan == 4){
+        if(auth()->user()->id_jabatan != 1){
             $id = auth()->user()->id;
         }
         $title = 'Teguran';

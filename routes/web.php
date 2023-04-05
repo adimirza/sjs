@@ -57,6 +57,7 @@ Route::post('/pegawai/ganti_foto', [User::class, 'ganti_foto'])->middleware(['au
 Route::get('/pegawai/hapus_foto/{id}', [User::class, 'hapus_foto'])->middleware(['auth', 'permission:pegawai,read']);
 Route::delete('/pegawai/delete/{id}', [User::class, 'delete'])->middleware(['auth', 'permission:pegawai,delete']);
 Route::post('/pegawai/reset', [User::class, 'reset'])->middleware(['auth', 'permission:pegawai,update']);
+Route::post('/pegawai/import_excel', [User::class, 'import_excel'])->middleware(['auth', 'permission:pegawai,create']);
 
 Route::get('/role', [Role::class, 'index'])->middleware(['auth', 'permission:role,read']);
 Route::match(['get', 'post'],'/role/add', [Role::class, 'store'])->middleware(['auth', 'permission:role,create']);
@@ -163,6 +164,8 @@ Route::delete('/departemen/delete/{id}', [Departemen::class, 'delete'])->middlew
 
 Route::get('/reload-captcha', [Login::class, 'reloadCaptcha']);
 Route::get('/login', [Login::class, 'index'])->name('login')->middleware('guest');
+// Route::match(['get', 'post'], '/reset', [Login::class, 'reset'])->name('reset')->middleware('guest');
+Route::post('/reset', [Login::class, 'reset'])->name('reset')->middleware('guest');
 Route::get('/register', [Login::class, 'register'])->middleware('guest');
 Route::post('/register/store', [Login::class, 'store'])->middleware('guest');
 Route::post('/proses_login', [Login::class, 'proses_login']);

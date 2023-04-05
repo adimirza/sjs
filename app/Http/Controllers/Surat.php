@@ -148,8 +148,9 @@ class Surat extends Controller
         return redirect($this->button->formEtc($title))->with('success', 'Hapus data berhasil');
     }
 
-    public function detail($id)
+    public function detail(Request $request, $id)
     {
+        $tab = $request->tab;
         $data = SuratModel::find($id);
         $soal = SoalModel::where('id_surat', $id)->get()->shuffle();
         $topik = TopikSeModel::all();
@@ -165,7 +166,7 @@ class Surat extends Controller
         $baca = LogSuratModel::where(['id_surat' => $id, 'status' => 1])->get();
         $tuntas = LogSuratModel::where(['id_surat' => $id, 'status' => 2])->get();
         $history_nilai = HistoryNilaiModel::where('id_surat', $id)->orderBy('created_at', 'DESC')->get();
-        return view('surat.detail', compact('data', 'soal', 'topik', 'user', 'departemen', 'title', 'button', 'cont', 'baca', 'tuntas', 'history_nilai'));
+        return view('surat.detail', compact('data', 'soal', 'topik', 'user', 'departemen', 'title', 'button', 'cont', 'baca', 'tuntas', 'history_nilai', 'tab'));
     }
 
     public function ganti_surat(Request $request)
