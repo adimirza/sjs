@@ -34,14 +34,17 @@ class Login extends Controller
         ])->validate();
 
         $cek = UserModel::where('username', $request->username)->first();
-        if($cek['password'] == md5($request->password)){
-            $username = $cek['username'];
-            return view('login.reset', compact('username'));
-        }
-        
-        if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
-            $request->session()->regenerate();
-            return redirect()->intended('/');
+
+        if($cek){
+            if($cek['password'] == md5($request->password)){
+                $username = $cek['username'];
+                return view('login.reset', compact('username'));
+            }
+            
+            if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
+                $request->session()->regenerate();
+                return redirect()->intended('/');
+            }
         }
 
         return back()->with('loginError', 'Login Failed!');

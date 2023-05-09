@@ -23,20 +23,34 @@
             $tuntas = $cont->getJmlStatus($data->id)['tuntas'];
             $belum = $target - $baca;
             @endphp
+            @if($target > 0)
+              @php
+              $per_baca = $baca/$target;
+              $per_tuntas = $tuntas/$target;
+              $per_belum = $belum/$target;
+              @endphp
+            @else
+              @php
+              $per_baca = 0;
+              $per_tuntas = 0;
+              $per_belum = 0;
+              @endphp
+            @endif
+
             <div class="progress">
               <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="{{ $target }}" aria-valuemin="0" aria-valuemax="{{ $target }}">{{ $target }} Anggota</div>
             </div>
             <p>Jumlah Target Staff</p>
             <div class="progress mt-3">
-              <div class="progress-bar" role="progressbar" style="width: {{ number_format(($baca/$target)*100, 2, '.', ',') }}%" aria-valuenow="{{ $baca }}" aria-valuemin="0" aria-valuemax="{{ $target }}" title="{{ number_format(($baca/$target)*100, 2, '.', ',') }}%">{{ number_format(($baca/$target)*100, 2, '.', ',') }}%</div>
+              <div class="progress-bar" role="progressbar" style="width: {{ number_format($per_baca*100, 2, '.', ',') }}%" aria-valuenow="{{ $baca }}" aria-valuemin="0" aria-valuemax="{{ $target }}" title="{{ number_format($per_baca*100, 2, '.', ',') }}%">{{ number_format($per_baca*100, 2, '.', ',') }}%</div>
             </div>
             <p> SE Dilihat <small style="font-size: x-small;"><a href="#" onclick="getDataLog(1)" data-st="1" data-bs-toggle="modal" data-bs-target="#log_surat">Lihat Detail</a></small></p>
             <div class="progress mt-3">
-              <div class="progress-bar" role="progressbar" style="width: {{ number_format(($tuntas/$target)*100, 2, '.', ',') }}%" aria-valuenow="{{ $tuntas }}" aria-valuemin="0" aria-valuemax="{{ $target }}" title="{{ number_format(($tuntas/$target)*100, 2, '.', ',') }}%">{{ number_format(($tuntas/$target)*100, 2, '.', ',') }}%</div>
+              <div class="progress-bar" role="progressbar" style="width: {{ number_format($per_tuntas*100, 2, '.', ',') }}%" aria-valuenow="{{ $tuntas }}" aria-valuemin="0" aria-valuemax="{{ $target }}" title="{{ number_format($per_tuntas*100, 2, '.', ',') }}%">{{ number_format($per_tuntas*100, 2, '.', ',') }}%</div>
             </div>
             <p>SE Tuntas <small style="font-size: x-small;"><a href="#" onclick="getDataLog(2)" data-st="2" data-bs-toggle="modal" data-bs-target="#log_surat">Lihat Detail</a></small></p>
             <div class="progress mt-3">
-              <div class="progress-bar" role="progressbar" style="width: {{ number_format(($belum/$target)*100, 2, '.', ',') }}%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="{{ $target }}" title="{{ number_format(($belum/$target)*100, 2, '.', ',') }}%">{{ number_format(($belum/$target)*100, 2, '.', ',') }}%</div>
+              <div class="progress-bar" role="progressbar" style="width: {{ number_format($per_belum*100, 2, '.', ',') }}%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="{{ $target }}" title="{{ number_format($per_belum*100, 2, '.', ',') }}%">{{ number_format($per_belum*100, 2, '.', ',') }}%</div>
             </div>
             <p>Belum diketahui</p><!-- End Progress Bars with labels -->
             <br>
